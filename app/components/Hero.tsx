@@ -69,20 +69,6 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Ringkasan Metric */}
-          <div className="mt-16 pt-8 border-t border-slate-800/80 grid grid-cols-3 gap-6">
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">150+</div>
-              <div className="text-xs sm:text-sm text-slate-400 mt-1">Klien Terbantu</div>
-            </div>
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">98%</div>
-              <div className="text-xs sm:text-sm text-slate-400 mt-1">Kepuasan Klien</div>
-            </div>
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">$50M+</div>
-              <div className="text-xs sm:text-sm text-slate-400 mt-1">Nilai Dihasilkan</div>
-            </div>
           </div>
         </div>
       </div>
