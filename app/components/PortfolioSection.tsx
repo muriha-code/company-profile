@@ -305,22 +305,12 @@ export default function PortfolioSection() {
                 </div>
               </div>
 
-              {/* Metric Card Footer & CTA Action */}
-              <div className="px-6 sm:px-7 py-5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between mt-auto">
-                <div>
-                  <div className="text-2xl font-extrabold text-blue-600 tracking-tight flex items-center space-x-1">
-                    <span>{item.metric}</span>
-                    <FontAwesomeIcon icon={faChartLine} className="w-4 h-4 text-blue-500 text-opacity-80" />
-                  </div>
-                  <div className="text-[11px] text-slate-500 font-semibold tracking-wide uppercase">
-                    {item.metricLabel}
-                  </div>
-                </div>
-
+              {/* Card Footer Action */}
+              <div className="px-6 sm:px-7 py-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-end mt-auto">
                 <button
                   onClick={() => handleConsultation(item.title)}
                   aria-label={`Konsultasi studi kasus ${item.title}`}
-                  className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-800 hover:text-blue-600 transition-colors duration-200 cursor-pointer group/link py-2 px-3 rounded-lg hover:bg-blue-50"
+                  className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-800 hover:text-blue-600 transition-colors duration-200 cursor-pointer group/link py-2 px-3.5 rounded-lg hover:bg-blue-50 border border-slate-200/60 hover:border-blue-200 shadow-sm"
                 >
                   <span>Detail</span>
                   <FontAwesomeIcon
