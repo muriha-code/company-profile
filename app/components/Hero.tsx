@@ -68,8 +68,6 @@ export default function Hero() {
               Konsultasi Gratis
             </a>
           </div>
-
-          </div>
         </div>
       </div>
     </section>
