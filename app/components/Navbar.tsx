@@ -38,49 +38,49 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
-  // Menangani efek bayangan header saat di-scroll
+  // Menangani deteksi scroll untuk bayangan header & highlight menu aktif secara akurat
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
+      // 1. Efek bayangan header saat di-scroll
+      setIsScrolled(window.scrollY > 20);
+
+      // 2. Deteksi section yang sedang aktif di viewport
+      const scrollPosition = window.scrollY + 180; // Offset navbar height
+      const sectionIds = navItems.map((item) => item.targetId);
+
+      // Jika scroll berada di paling bawah halaman, aktifkan menu terakhir ("portfolio")
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 50
+      ) {
+        setActiveSection("portfolio");
+        return;
+      }
+
+      // Melakukan iterasi dari section paling bawah ke paling atas
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sectionIds[i]);
+        if (section) {
+          const sectionTop = section.offsetTop;
+          if (scrollPosition >= sectionTop) {
+            setActiveSection(sectionIds[i]);
+            break;
+          }
+        }
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    // Panggil saat pertama kali dimuat
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // IntersectionObserver untuk melacak section yang sedang aktif
-  useEffect(() => {
-    const observerOptions: IntersectionObserverInit = {
-      root: null,
-      rootMargin: "-20% 0px -60% 0px",
-      threshold: 0,
-    };
-
-    const observerCallback: IntersectionObserverCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-    navItems.forEach((item) => {
-      const element = document.getElementById(item.targetId);
-      if (element) observer.observe(element);
-    });
-
-    return () => observer.disconnect();
   }, []);
 
   // Smooth scroll handler untuk menu internal
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
+    setActiveSection(targetId);
     setMobileMenuOpen(false);
     const element = document.getElementById(targetId);
     if (element) {
