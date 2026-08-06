@@ -3,91 +3,13 @@
 import { useState, FormEvent } from "react";
 import Hero from "./components/Hero";
 import ServicesSection from "./components/ServicesSection";
-
-interface ServiceItem {
-  icon: string;
-  title: string;
-  description: string;
-  features: string[];
-}
-
-interface PortfolioItem {
-  category: string;
-  title: string;
-  client: string;
-  description: string;
-  metric: string;
-  metricLabel: string;
-}
-
-const servicesData: ServiceItem[] = [
-  {
-    icon: "📈",
-    title: "Business Strategy",
-    description: "Perencanaan strategis terarah berbasis analisis pasar komprehensif untuk pertumbuhan jangka panjang.",
-    features: ["Market Expansion", "Strategic Roadmap", "Competitive Analysis"],
-  },
-  {
-    icon: "💰",
-    title: "Financial Optimization",
-    description: "Restrukturisasi dan optimalisasi aliran kas untuk memaksimalkan margin keuntungan bisnis Anda.",
-    features: ["Cash Flow Management", "Cost Reduction", "Financial Forecasting"],
-  },
-  {
-    icon: "⚙️",
-    title: "Operational Excellence",
-    description: "Peningkatan efisiensi operasional dan otomatisasi alur kerja guna memangkas redundansi.",
-    features: ["Process Automation", "Supply Chain Audit", "KPI Framework"],
-  },
-  {
-    icon: "👥",
-    title: "Leadership & Team",
-    description: "Pengembangan kapabilitas kepemimpinan dan budaya kerja tinggi untuk akselerasi eksekusi.",
-    features: ["Talent Alignment", "Executive Coaching", "Performance Review"],
-  },
-];
-
-const portfolioData: PortfolioItem[] = [
-  {
-    category: "Financial Strategy",
-    title: "FinTech Scaleup Restructuring",
-    client: "PayPulse Solutions",
-    description: "Optimalisasi struktur finansial dan perancangan strategi pendanaan Seri B.",
-    metric: "+240%",
-    metricLabel: "Pertumbuhan Revenue YoY",
-  },
-  {
-    category: "Operations",
-    title: "Supply Chain & Logistics Audit",
-    client: "LogiGlobal Tech",
-    description: "Transformasi proses rantai pasok dan efisiensi operasional gudang regional.",
-    metric: "35%",
-    metricLabel: "Pengurangan Biaya Operasional",
-  },
-  {
-    category: "Market Expansion",
-    title: "Regional Retail Expansion",
-    client: "OmniStore Retail",
-    description: "Strategi penetrasi pasar baru di 12 kota besar secara bersamaan.",
-    metric: "12 Pasar",
-    metricLabel: "Cabang Baru Berhasil Dioperasikan",
-  },
-];
+import PortfolioSection from "./components/PortfolioSection";
 
 export default function Home() {
-  const scrollToSection = (targetId: string) => {
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-
   return (
     <div className="w-full">
       {/* 1. HERO SECTION */}
       <Hero />
-
 
       {/* 2. ABOUT US SECTION */}
       <section id="about" className="scroll-mt-20 py-24 bg-white">
@@ -153,58 +75,9 @@ export default function Home() {
       {/* 3. SERVICES SECTION */}
       <ServicesSection />
 
-
       {/* 4. PORTFOLIO SECTION */}
-      <section id="portfolio" className="scroll-mt-20 py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-blue-600 font-semibold text-sm tracking-wider uppercase">Portfolio</span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mt-2 mb-4">
-              Studi Kasus & Rekam Jejak Keberhasilan
-            </h2>
-            <p className="text-slate-600 text-lg">
-              Lihat bagaimana kami membantu para klien dalam memecahkan masalah kompleks dan mencapai hasil bisnis nyata.
-            </p>
-          </div>
+      <PortfolioSection />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {portfolioData.map((project, index) => (
-              <div
-                key={index}
-                className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-200/80 hover:border-blue-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
-              >
-                <div className="p-8">
-                  <div className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-                    {project.category}
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">
-                    {project.title}
-                  </h3>
-                  <div className="text-xs font-medium text-slate-500 mb-4">
-                    Klien: {project.client}
-                  </div>
-                  <p className="text-slate-600 text-sm leading-relaxed">
-                    {project.description}
-                  </p>
-                </div>
-                <div className="bg-white p-6 border-t border-slate-200/80 flex items-center justify-between">
-                  <div>
-                    <div className="text-2xl font-extrabold text-blue-600">{project.metric}</div>
-                    <div className="text-xs text-slate-500 font-medium">{project.metricLabel}</div>
-                  </div>
-                  <button
-                    onClick={() => scrollToSection("contact")}
-                    className="text-xs font-semibold text-slate-700 hover:text-blue-600 flex items-center space-x-1 cursor-pointer"
-                  >
-                    <span>Konsultasi</span>
-                    <span>&rarr;</span>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
 
     </div>
