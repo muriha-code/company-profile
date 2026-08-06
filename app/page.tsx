@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import Hero from "./components/Hero";
+import ClientMarquee from "./components/ClientMarquee";
 import ServicesSection from "./components/ServicesSection";
 import PortfolioSection from "./components/PortfolioSection";
 
@@ -11,7 +12,11 @@ export default function Home() {
       {/* 1. HERO SECTION */}
       <Hero />
 
-      {/* 2. ABOUT US SECTION */}
+      {/* 2. CLIENT LOGOS MARQUEE SECTION (SEPARATE SECTION) */}
+      <ClientMarquee />
+
+      {/* 3. ABOUT US SECTION */}
+
       <section id="about" className="scroll-mt-20 py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">

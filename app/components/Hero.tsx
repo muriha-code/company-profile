@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { getWhatsAppUrl, WHATSAPP_PHONE, WHATSAPP_DEFAULT_MESSAGE } from "./Navbar";
 
-
 export default function Hero() {
   const scrollToSection = (targetId: string) => {
     const element = document.getElementById(targetId);
@@ -32,7 +31,7 @@ export default function Hero() {
       {/* 2. LAYER 10: Dark Gradient Overlay untuk kontras tinggi */}
       <div className="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-slate-900/60 backdrop-blur-[1px]" />
 
-      {/* 3. LAYER 20: Content (Text, Heading, Buttons) */}
+      {/* 3. LAYER 20: Content Utama (Heading, Subheading, Buttons) */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 w-full">
         <div className="max-w-3xl">
           {/* Heading Utama */}
@@ -73,3 +72,5 @@ export default function Hero() {
     </section>
   );
 }
+
+
