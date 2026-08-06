@@ -14,7 +14,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative w-full min-h-screen flex items-center scroll-mt-20 overflow-hidden bg-slate-950"
+      className="relative w-full min-h-[calc(100vh-80px)] lg:min-h-screen flex items-center justify-center pt-24 pb-20 sm:pt-28 sm:pb-24 lg:pt-32 lg:pb-28 scroll-mt-20 overflow-hidden bg-slate-950"
     >
       {/* 1. LAYER 0: Background Image (next/image dengan fill & object-cover) */}
       <div className="absolute inset-0 z-0">
@@ -31,10 +31,10 @@ export default function Hero() {
       {/* 2. LAYER 10: Dark Gradient Overlay untuk kontras tinggi */}
       <div className="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-slate-900/60 backdrop-blur-[1px]" />
 
-      {/* 3. LAYER 20: Content Utama (Heading, Subheading, Buttons) */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 w-full">
+      {/* 3. LAYER 20: Content Utama Full Screen Focus */}
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col justify-center">
         <div className="max-w-3xl">
-          {/* Heading Utama */}
+          {/* Heading Utama (Dominan, Bold & Standout) */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white mb-6">
             Your Partner in{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
@@ -42,8 +42,8 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* Deskripsi (Warna Abu-Abu Terang & Dibatasi Lebarnya) */}
-          <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mb-8 leading-relaxed font-normal">
+          {/* Deskripsi (Luas & Mudah Dibaca) */}
+          <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal">
             GrowthLine Consulting membantu bisnis Anda berkembang secara terukur dan berkelanjutan dengan strategi terarah berbasis data serta eksekusi yang presisi.
           </p>
 
@@ -52,7 +52,7 @@ export default function Hero() {
             {/* Tombol Utama Oranye */}
             <button
               onClick={() => scrollToSection("services")}
-              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-orange-500/20 hover:shadow-orange-500/35 transition-all duration-200 text-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-orange-500/20 hover:shadow-orange-500/35 transition-all duration-200 text-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-slate-900 text-base"
             >
               Our Services
             </button>
@@ -62,7 +62,7 @@ export default function Hero() {
               href={getWhatsAppUrl(WHATSAPP_PHONE, WHATSAPP_DEFAULT_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-emerald-600/90 hover:bg-emerald-600 border border-emerald-500/50 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/35 transition-all duration-200 text-center cursor-pointer backdrop-blur-sm"
+              className="bg-emerald-600/90 hover:bg-emerald-600 border border-emerald-500/50 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/35 transition-all duration-200 text-center cursor-pointer backdrop-blur-sm text-base"
             >
               Konsultasi Gratis
             </a>
@@ -72,5 +72,8 @@ export default function Hero() {
     </section>
   );
 }
+
+
+
 
 
