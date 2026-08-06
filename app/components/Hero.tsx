@@ -35,12 +35,6 @@ export default function Hero() {
       {/* 3. LAYER 20: Content (Text, Heading, Buttons) */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 w-full">
         <div className="max-w-3xl">
-          {/* Badge Tagline */}
-          <div className="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-400/30 px-4 py-1.5 rounded-full text-blue-300 text-sm font-medium mb-6 backdrop-blur-md">
-            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-            <span>GrowthLine Consulting</span>
-          </div>
-
           {/* Heading Utama */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white mb-6">
             Your Partner in{" "}
