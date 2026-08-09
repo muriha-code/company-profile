@@ -91,7 +91,7 @@ export default function ClientMarquee() {
   const marqueeLogos = [...CLIENT_LOGOS, ...CLIENT_LOGOS];
 
   return (
-    <section className="w-full bg-white py-10 sm:py-12 lg:py-14 border-b border-slate-100 overflow-hidden">
+    <section className="w-full bg-white pt-10 sm:pt-12 lg:pt-14 pb-4 sm:pb-6 border-b border-slate-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <p className="text-center text-sm sm:text-base font-semibold text-slate-600 mb-8 sm:mb-10 max-w-3xl mx-auto tracking-wide">
           Dipercaya oleh lebih dari 50+ perusahaan dari Sektor Swasta, BUMN, dan Lembaga di Indonesia
