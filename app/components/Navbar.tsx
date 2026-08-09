@@ -94,8 +94,8 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-md py-3 border-b border-slate-100"
-          : "bg-white/80 backdrop-blur-sm py-4 border-b border-slate-100/60"
+          ? "bg-white text-gray-900 shadow-md border-b border-gray-200 py-3"
+          : "bg-transparent text-white py-5 border-b border-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
@@ -105,11 +105,20 @@ export default function Navbar() {
           onClick={(e) => scrollToSection(e, "home")}
           className="flex items-center space-x-2.5 group focus:outline-none"
         >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-700 to-blue-500 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
             GL
           </div>
-          <span className="font-extrabold text-xl tracking-tight text-slate-900">
-            GrowthLine <span className="text-blue-600 font-semibold">Consulting</span>
+          <span
+            className={`font-extrabold text-xl tracking-tight transition-colors duration-300 ${
+              isScrolled ? "text-gray-900" : "text-white"
+            }`}
+          >
+            GrowthLine{" "}
+            <span
+              className={isScrolled ? "text-blue-600 font-semibold" : "text-blue-300 font-semibold"}
+            >
+              Consulting
+            </span>
           </span>
         </a>
 
@@ -123,9 +132,13 @@ export default function Navbar() {
                 href={`#${item.targetId}`}
                 onClick={(e) => scrollToSection(e, item.targetId)}
                 className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
-                  isActive
-                    ? "text-blue-600 bg-blue-50/80 font-semibold"
-                    : "text-slate-600 hover:text-blue-600 hover:bg-slate-50"
+                  isScrolled
+                    ? isActive
+                      ? "text-blue-600 bg-blue-50 font-semibold"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                    : isActive
+                      ? "text-white bg-white/20 font-semibold"
+                      : "text-gray-200 hover:text-white hover:bg-white/10"
                 }`}
               >
                 {item.label}
@@ -140,7 +153,7 @@ export default function Navbar() {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4.5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm hover:shadow-emerald-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 active:scale-95"
+            className="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4.5 py-2 rounded-xl text-sm font-bold transition-all shadow-sm hover:shadow-emerald-500/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 active:scale-95"
             aria-label="Hubungi Kami melalui WhatsApp"
           >
             <FontAwesomeIcon icon={faWhatsapp} className="w-4 h-4 text-emerald-100" />
@@ -152,7 +165,11 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none"
+          className={`md:hidden p-2 rounded-xl transition-colors focus:outline-none ${
+            isScrolled
+              ? "text-gray-900 hover:bg-gray-100"
+              : "text-white hover:bg-white/10"
+          }`}
           aria-label="Toggle Menu Navigasi"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,7 +184,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-5 space-y-2 shadow-xl animate-in slide-in-from-top-2 duration-200">
+        <div className="md:hidden bg-white text-gray-900 border-b border-gray-200 px-4 pt-3 pb-5 space-y-2 shadow-xl animate-in slide-in-from-top-2 duration-200">
           {navItems.map((item) => {
             const isActive = activeSection === item.targetId;
             return (
@@ -178,7 +195,7 @@ export default function Navbar() {
                 className={`block px-3.5 py-2.5 rounded-lg text-base font-medium transition-colors ${
                   isActive
                     ? "text-blue-600 bg-blue-50 font-semibold"
-                    : "text-slate-600 hover:text-blue-600 hover:bg-slate-50"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 }`}
               >
                 {item.label}
