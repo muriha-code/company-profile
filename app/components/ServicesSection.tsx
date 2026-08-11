@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChartLine,
@@ -13,7 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { getWhatsAppUrl, WHATSAPP_PHONE, WHATSAPP_DEFAULT_MESSAGE } from "./Navbar";
-
+import { getServicesFromFirestore } from "@/lib/services/servicesService";
 
 // Interface definisi data layanan
 export interface ServiceItem {
@@ -36,7 +36,7 @@ export interface ServiceItem {
 }
 
 // Data Layanan dari Business Strategy hingga Leadership & Team
-const servicesData: ServiceItem[] = [
+export const servicesData: ServiceItem[] = [
   {
     id: "business-strategy",
     icon: faChartLine,
@@ -137,7 +137,17 @@ const servicesData: ServiceItem[] = [
 
 export default function ServicesSection() {
   const whatsappUrl = getWhatsAppUrl(WHATSAPP_PHONE, WHATSAPP_DEFAULT_MESSAGE);
+  const [services, setServices] = useState<ServiceItem[]>(servicesData);
 
+  useEffect(() => {
+    async function loadServices() {
+      const data = await getServicesFromFirestore();
+      if (data && data.length > 0) {
+        setServices(data);
+      }
+    }
+    loadServices();
+  }, []);
 
   return (
     <section
@@ -169,7 +179,7 @@ export default function ServicesSection() {
 
         {/* Grid Layanan (4 Card Layout) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          {servicesData.map((service) => (
+          {services.map((service) => (
             <div
               key={service.id}
               className={`group bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/80 transition-all duration-300 shadow-sm hover:shadow-xl ${service.colorScheme.borderHover} flex flex-col justify-between relative overflow-hidden`}
