@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 // Self-contained SVG Icon Components (No external dependencies required)
 function PhoneIcon({ className = "w-5 h-5" }: { className?: string }) {
@@ -88,19 +90,20 @@ export default function Footer() {
 
                     {/* KOLOM 1: Logo Merek "Levner", Deskripsi, & Sosmed */}
                     <div className="space-y-5">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 rounded-xl bg-white text-sky-900 font-extrabold text-xl flex items-center justify-center shadow-md">
-                                G
-                            </div>
-                            <div>
-                                <span className="text-2xl font-black tracking-tight text-white block leading-none">
-                                    GrowthLine
-                                </span>
-                                <span className="text-xs text-sky-200 font-medium tracking-wide">
-                                    GrowthLine Consulting
-                                </span>
-                            </div>
-                        </div>
+                        <Link
+                            href="/"
+                            onClick={(e) => scrollToSection(e, "home")}
+                            className="relative block h-16 w-72 group focus:outline-none"
+                        >
+                            <Image
+                                src="/logos/growthline-light.png"
+                                alt="GrowthLine Consulting Logo"
+                                fill
+                                sizes="288px"
+                                className="object-contain object-left"
+                                priority
+                            />
+                        </Link>
 
                         <p className="text-sky-100/90 text-sm leading-relaxed font-normal">
                             Mitra strategis terpercaya dalam konsultasi bisnis, manajemen kepatuhan, serta transformasi keberlanjutan untuk akselerasi bisnis Anda.

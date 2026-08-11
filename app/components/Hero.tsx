@@ -37,7 +37,7 @@ export default function Hero() {
           {/* Heading Utama (Dominan, Bold & Standout) */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white mb-6">
             Your Partner in{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
               Business Growth
             </span>
           </h1>
@@ -52,7 +52,7 @@ export default function Hero() {
             {/* Tombol Utama Oranye */}
             <button
               onClick={() => scrollToSection("services")}
-              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-orange-500/20 hover:shadow-orange-500/35 transition-all duration-200 text-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-slate-900 text-base"
+              className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 transition-all duration-200 text-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-900 text-base"
             >
               Our Services
             </button>

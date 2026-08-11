@@ -1,14 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCommentDots } from "@fortawesome/free-solid-svg-icons";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 // ============================================================================
 // KONFIGURASI WHATSAPP & NAVIGASI (Dapat diubah sesuai kebutuhan)
 // ============================================================================
-export const WHATSAPP_PHONE = "6281234567890"; // Nomor HP dalam format internasional (tanpa + atau spasi)
+export const WHATSAPP_PHONE = "6281234567890"; // Nomor HP dalam format internasional
 export const WHATSAPP_DEFAULT_MESSAGE =
   "Halo GrowthLine Consulting, saya ingin berkonsultasi mengenai layanan bisnis Anda. Mohon informasi selengkapnya.";
 
@@ -17,7 +18,6 @@ interface NavItem {
   targetId: string;
 }
 
-// Daftar menu navigasi aktif (Menu yang tidak terpakai dapat dihapus dari array ini)
 const navItems: NavItem[] = [
   { label: "Beranda", targetId: "home" },
   { label: "Tentang Kami", targetId: "about" },
@@ -25,9 +25,6 @@ const navItems: NavItem[] = [
   { label: "Portofolio", targetId: "portfolio" },
 ];
 
-/**
- * Helper function untuk menghasilkan URL WhatsApp API yang aman dengan encodeURIComponent
- */
 export const getWhatsAppUrl = (phone: string, message: string): string => {
   const encodedMessage = encodeURIComponent(message);
   return `https://wa.me/${phone}?text=${encodedMessage}`;
@@ -38,17 +35,13 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
-  // Menangani deteksi scroll untuk bayangan header & highlight menu aktif secara akurat
   useEffect(() => {
     const handleScroll = () => {
-      // 1. Efek bayangan header saat di-scroll
       setIsScrolled(window.scrollY > 20);
 
-      // 2. Deteksi section yang sedang aktif di viewport
-      const scrollPosition = window.scrollY + 180; // Offset navbar height
+      const scrollPosition = window.scrollY + 180;
       const sectionIds = navItems.map((item) => item.targetId);
 
-      // Jika scroll berada di paling bawah halaman, aktifkan menu terakhir ("portfolio")
       if (
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 50
@@ -57,7 +50,6 @@ export default function Navbar() {
         return;
       }
 
-      // Melakukan iterasi dari section paling bawah ke paling atas
       for (let i = sectionIds.length - 1; i >= 0; i--) {
         const section = document.getElementById(sectionIds[i]);
         if (section) {
@@ -70,14 +62,12 @@ export default function Navbar() {
       }
     };
 
-    // Panggil saat pertama kali dimuat
     handleScroll();
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Smooth scroll handler untuk menu internal
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
     setActiveSection(targetId);
@@ -92,35 +82,27 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white text-gray-900 shadow-md border-b border-gray-200 py-3"
-          : "bg-transparent text-white py-5 border-b border-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+        ? "bg-white text-gray-900 shadow-md border-b border-gray-200 py-2.5 sm:py-3"
+        : "bg-transparent text-white py-4 sm:py-5 border-b border-transparent"
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-        {/* Brand Logo */}
-        <a
-          href="#home"
+        {/* Brand Logo (Sudah Diperbesar & Di-scale) */}
+        <Link
+          href="/"
           onClick={(e) => scrollToSection(e, "home")}
-          className="flex items-center space-x-2.5 group focus:outline-none"
+          className="relative block h-10 w-40 sm:h-12 sm:w-52 group focus:outline-none"
         >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
-            GL
-          </div>
-          <span
-            className={`font-extrabold text-xl tracking-tight transition-colors duration-300 ${
-              isScrolled ? "text-gray-900" : "text-white"
-            }`}
-          >
-            GrowthLine{" "}
-            <span
-              className={isScrolled ? "text-blue-600 font-semibold" : "text-blue-300 font-semibold"}
-            >
-              Consulting
-            </span>
-          </span>
-        </a>
+          <Image
+            src={isScrolled ? "/logos/growthline-dark.png" : "/logos/growthline-light.png"}
+            alt="GrowthLine Consulting Logo"
+            fill
+            sizes="(max-width: 640px) 160px, 208px"
+            className="object-contain object-left origin-left transition-all duration-300"
+            priority
+          />
+        </Link>
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
@@ -131,15 +113,14 @@ export default function Navbar() {
                 key={item.targetId}
                 href={`#${item.targetId}`}
                 onClick={(e) => scrollToSection(e, item.targetId)}
-                className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
-                  isScrolled
-                    ? isActive
-                      ? "text-blue-600 bg-blue-50 font-semibold"
-                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
-                    : isActive
-                      ? "text-white bg-white/20 font-semibold"
-                      : "text-gray-200 hover:text-white hover:bg-white/10"
-                }`}
+                className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${isScrolled
+                  ? isActive
+                    ? "text-blue-600 bg-blue-50 font-semibold"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                  : isActive
+                    ? "text-white bg-white/20 font-semibold"
+                    : "text-gray-200 hover:text-white hover:bg-white/10"
+                  }`}
               >
                 {item.label}
               </a>
@@ -165,11 +146,10 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className={`md:hidden p-2 rounded-xl transition-colors focus:outline-none ${
-            isScrolled
-              ? "text-gray-900 hover:bg-gray-100"
-              : "text-white hover:bg-white/10"
-          }`}
+          className={`md:hidden p-2 rounded-xl transition-colors focus:outline-none ${isScrolled
+            ? "text-gray-900 hover:bg-gray-100"
+            : "text-white hover:bg-white/10"
+            }`}
           aria-label="Toggle Menu Navigasi"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -192,17 +172,16 @@ export default function Navbar() {
                 key={item.targetId}
                 href={`#${item.targetId}`}
                 onClick={(e) => scrollToSection(e, item.targetId)}
-                className={`block px-3.5 py-2.5 rounded-lg text-base font-medium transition-colors ${
-                  isActive
-                    ? "text-blue-600 bg-blue-50 font-semibold"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                }`}
+                className={`block px-3.5 py-2.5 rounded-lg text-base font-medium transition-colors ${isActive
+                  ? "text-blue-600 bg-blue-50 font-semibold"
+                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                  }`}
               >
                 {item.label}
               </a>
             );
           })}
-          
+
           {/* WhatsApp CTA Button (Mobile) */}
           <div className="pt-2">
             <a
