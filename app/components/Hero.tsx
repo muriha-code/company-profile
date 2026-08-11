@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { getWhatsAppUrl, WHATSAPP_PHONE, WHATSAPP_DEFAULT_MESSAGE } from "./Navbar";
 
 export default function Hero() {
   const scrollToSection = (targetId: string) => {
@@ -14,7 +13,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative w-full min-h-[calc(100vh-80px)] lg:min-h-screen flex items-center justify-center pt-24 pb-20 sm:pt-28 sm:pb-24 lg:pt-32 lg:pb-28 scroll-mt-20 overflow-hidden bg-slate-950"
+      className="relative w-full min-h-[calc(100vh-140px)] sm:min-h-[calc(100vh-160px)] lg:min-h-[calc(100vh-180px)] flex items-center justify-center pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20 scroll-mt-20 overflow-hidden bg-slate-950"
     >
       {/* 1. LAYER 0: Background Image (next/image dengan fill & object-cover) */}
       <div className="absolute inset-0 z-0">
@@ -35,7 +34,7 @@ export default function Hero() {
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col justify-center">
         <div className="max-w-3xl">
           {/* Heading Utama (Dominan, Bold & Standout) */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white mb-6">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white mb-5 sm:mb-6">
             Your Partner in{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
               Business Growth
@@ -43,29 +42,19 @@ export default function Hero() {
           </h1>
 
           {/* Deskripsi (Luas & Mudah Dibaca) */}
-          <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal">
+          <p className="text-base sm:text-xl text-slate-300 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal">
             GrowthLine Consulting membantu bisnis Anda berkembang secara terukur dan berkelanjutan dengan strategi terarah berbasis data serta eksekusi yang presisi.
           </p>
 
           {/* Tombol CTA */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-            {/* Tombol Utama Oranye */}
+            {/* Tombol Utama CTA (Our Services) */}
             <button
               onClick={() => scrollToSection("services")}
-              className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 transition-all duration-200 text-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-900 text-base"
+              className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white font-semibold px-8 py-3.5 sm:py-4 rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 transition-all duration-200 text-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-900 text-base"
             >
               Our Services
             </button>
-
-            {/* Tombol Sekunder WhatsApp CTA */}
-            <a
-              href={getWhatsAppUrl(WHATSAPP_PHONE, WHATSAPP_DEFAULT_MESSAGE)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-emerald-600/90 hover:bg-emerald-600 border border-emerald-500/50 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/35 transition-all duration-200 text-center cursor-pointer backdrop-blur-sm text-base"
-            >
-              Konsultasi Gratis
-            </a>
           </div>
         </div>
       </div>

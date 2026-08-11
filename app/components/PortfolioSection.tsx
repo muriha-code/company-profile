@@ -267,10 +267,10 @@ export default function PortfolioSection() {
     if (selectedProject) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "";
     };
   }, [selectedProject]);
 
@@ -324,7 +324,7 @@ export default function PortfolioSection() {
   return (
     <section
       id="portfolio"
-      className="scroll-mt-20 py-24 bg-gradient-to-b from-white via-slate-50/50 to-white relative overflow-hidden"
+      className="scroll-mt-20 py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-white via-slate-50/50 to-white relative overflow-hidden"
     >
       {/* Background Decorative Element */}
       <div className="absolute top-1/3 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />

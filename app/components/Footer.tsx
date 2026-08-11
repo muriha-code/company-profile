@@ -85,21 +85,21 @@ export default function Footer() {
     return (
         <footer className="bg-gradient-to-br from-sky-800 via-sky-900 to-blue-950 text-white relative">
             {/* Container Utama 4 Kolom (Desktop 4 Kolom, Mobile Responsive 1 Kolom) */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-8 sm:pb-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12">
 
-                    {/* KOLOM 1: Logo Merek "Levner", Deskripsi, & Sosmed */}
+                    {/* KOLOM 1: Logo Merek, Deskripsi, & Sosmed */}
                     <div className="space-y-5">
                         <Link
                             href="/"
                             onClick={(e) => scrollToSection(e, "home")}
-                            className="relative block h-16 w-72 group focus:outline-none"
+                            className="relative block h-12 w-52 sm:h-14 sm:w-60 lg:h-16 lg:w-72 group focus:outline-none"
                         >
                             <Image
                                 src="/logos/growthline-light.png"
                                 alt="GrowthLine Consulting Logo"
                                 fill
-                                sizes="288px"
+                                sizes="(max-width: 640px) 208px, (max-width: 1024px) 240px, 288px"
                                 className="object-contain object-left"
                                 priority
                             />
@@ -277,11 +277,11 @@ export default function Footer() {
                         © 2026 GrowthLine Consulting. All rights reserved.
                     </p>
 
-                    {/* Tombol Scroll-to-Top Oranye di Sudut Kanan Bawah */}
+                    {/* Tombol Scroll-to-Top Biru di Sudut Kanan Bawah */}
                     <button
                         onClick={scrollToTop}
                         aria-label="Scroll to top"
-                        className="bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-full shadow-lg hover:shadow-orange-500/40 transition-all duration-200 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-orange-400 cursor-pointer"
+                        className="bg-blue-600 hover:bg-blue-500 text-white p-3 rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 transition-all duration-200 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
                     >
                         <ArrowUpIcon className="w-5 h-5" />
                     </button>

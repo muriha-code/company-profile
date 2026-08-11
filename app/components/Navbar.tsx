@@ -88,17 +88,17 @@ export default function Navbar() {
         }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-        {/* Brand Logo (Sudah Diperbesar & Di-scale) */}
+        {/* Brand Logo */}
         <Link
           href="/"
           onClick={(e) => scrollToSection(e, "home")}
-          className="relative block h-10 w-40 sm:h-12 sm:w-52 group focus:outline-none"
+          className="relative block h-10 w-44 sm:h-12 sm:w-56 group focus:outline-none"
         >
           <Image
             src={isScrolled ? "/logos/growthline-dark.png" : "/logos/growthline-light.png"}
             alt="GrowthLine Consulting Logo"
             fill
-            sizes="(max-width: 640px) 160px, 208px"
+            sizes="(max-width: 640px) 176px, 224px"
             className="object-contain object-left origin-left transition-all duration-300"
             priority
           />

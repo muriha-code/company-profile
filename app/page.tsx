@@ -46,7 +46,7 @@ export default function Home() {
             </div>
 
             {/* Right Card Feature */}
-            <div className="bg-slate-900 text-white rounded-2xl p-8 sm:p-10 shadow-xl relative overflow-hidden">
+            <div className="bg-slate-900 text-white rounded-2xl p-6 sm:p-10 shadow-xl relative overflow-hidden">
               <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-600/20 rounded-full blur-3xl" />
               <h3 className="text-2xl font-bold mb-6 text-white">Mengapa Memilih GrowthLine?</h3>
               <div className="space-y-6">

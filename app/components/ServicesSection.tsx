@@ -142,14 +142,14 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className="scroll-mt-20 py-24 bg-gradient-to-b from-slate-50 via-white to-slate-50/80 relative overflow-hidden border-y border-slate-200/60"
+      className="scroll-mt-20 py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-slate-50 via-white to-slate-50/80 relative overflow-hidden border-y border-slate-200/60"
     >
       {/* Background Decorative Blur Orbs */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-r from-blue-400/10 via-indigo-400/10 to-purple-400/10 blur-3xl pointer-events-none rounded-full" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 lg:mb-20">
           <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs sm:text-sm font-semibold tracking-wide uppercase mb-4 shadow-sm">
             <FontAwesomeIcon icon={faLightbulb} className="w-3.5 h-3.5 text-blue-600" />
             <span>Layanan Utama Kami</span>
@@ -172,7 +172,7 @@ export default function ServicesSection() {
           {servicesData.map((service) => (
             <div
               key={service.id}
-              className={`group bg-white rounded-2xl p-7 border border-slate-200/80 transition-all duration-300 shadow-sm hover:shadow-xl ${service.colorScheme.borderHover} flex flex-col justify-between relative overflow-hidden`}
+              className={`group bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/80 transition-all duration-300 shadow-sm hover:shadow-xl ${service.colorScheme.borderHover} flex flex-col justify-between relative overflow-hidden`}
             >
               {/* Subtle Card Background Glow on Hover */}
               <div
@@ -253,7 +253,7 @@ export default function ServicesSection() {
         </div>
 
         {/* Bottom Banner CTA */}
-        <div className="mt-16 sm:mt-20 bg-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden">
+        <div className="mt-14 sm:mt-16 lg:mt-20 bg-slate-900 rounded-3xl p-6 sm:p-10 lg:p-12 text-white shadow-2xl relative overflow-hidden">
           <div className="absolute -right-16 -top-16 w-72 h-72 bg-blue-600/20 rounded-full blur-3xl" />
           <div className="absolute -left-16 -bottom-16 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl" />
 

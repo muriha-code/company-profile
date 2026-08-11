@@ -3,6 +3,11 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { ReactNode } from "react";
 import { Metadata } from "next";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+
+// Prevent FontAwesome from automatically injecting CSS to fix SSR/CSR hydration mismatch
+config.autoAddCss = false;
 
 export const metadata: Metadata = {
   title: "GrowthLine Consulting | Your Partner in Business Growth",
@@ -16,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body suppressHydrationWarning className="antialiased bg-white text-slate-900 selection:bg-blue-600 selection:text-white">
+      <body className="antialiased bg-white text-slate-900 selection:bg-blue-600 selection:text-white">
         <Navbar />
         <main>{children}</main>
         <Footer />
