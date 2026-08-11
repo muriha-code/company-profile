@@ -19,6 +19,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { getWhatsAppUrl, WHATSAPP_PHONE } from "./Navbar";
+import { getPortfoliosFromFirestore } from "@/lib/services/portfolioService";
 
 // Definisi interface data portofolio terperinci
 export interface PortfolioItem {
@@ -28,19 +29,19 @@ export interface PortfolioItem {
   title: string;
   client: string;
   description: string;
-  fullDescription: string;
-  outcomes: string[];
-  deliverables: string[];
-  timeline: string;
+  fullDescription?: string;
+  outcomes?: string[];
+  deliverables?: string[];
+  timeline?: string;
   documentUrl?: string;
   image: string;
-  metric: string;
-  metricLabel: string;
-  tags: string[];
-  badgeColor: {
-    bg: string;
-    text: string;
-    border: string;
+  metric?: string;
+  metricLabel?: string;
+  tags?: string[];
+  badgeColor?: {
+    bg?: string;
+    text?: string;
+    border?: string;
   };
 }
 
@@ -258,9 +259,21 @@ const categories = [
 const ITEMS_PER_PAGE = 3;
 
 export default function PortfolioSection() {
+  const [items, setItems] = useState<PortfolioItem[]>(portfolioData);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedProject, setSelectedProject] = useState<PortfolioItem | null>(null);
+
+  // Load data portofolio dari Cloud Firestore secara otomatis
+  useEffect(() => {
+    async function loadPortfolios() {
+      const data = await getPortfoliosFromFirestore();
+      if (data && data.length > 0) {
+        setItems(data);
+      }
+    }
+    loadPortfolios();
+  }, []);
 
   // Mengunci scroll halaman utama saat modal terbuka (Body scroll lock)
   useEffect(() => {
@@ -286,7 +299,7 @@ export default function PortfolioSection() {
   }, []);
 
   // Filter items berdasarkan tab terpilih
-  const filteredItems = portfolioData.filter((item) => {
+  const filteredItems = items.filter((item) => {
     if (activeCategory === "all") return true;
     if (activeCategory === "other") {
       return item.categorySlug === "digital" || item.categorySlug === "leadership";
@@ -391,7 +404,7 @@ export default function PortfolioSection() {
                   {/* Kapsul Tag / Badge Kategori */}
                   <div className="absolute top-4 left-4 z-10">
                     <span
-                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-md shadow-sm ${item.badgeColor.bg} ${item.badgeColor.text} ${item.badgeColor.border}`}
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-md shadow-sm ${item.badgeColor?.bg || "bg-blue-50"} ${item.badgeColor?.text || "text-blue-700"} ${item.badgeColor?.border || "border-blue-200"}`}
                     >
                       {item.category}
                     </span>
@@ -522,7 +535,7 @@ export default function PortfolioSection() {
               {/* Badge Kategori di atas Gambar */}
               <div className="absolute top-4 left-5 z-10 flex items-center space-x-2">
                 <span
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-md shadow-md ${selectedProject.badgeColor.bg} ${selectedProject.badgeColor.text} ${selectedProject.badgeColor.border}`}
+                  className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-md shadow-md ${selectedProject.badgeColor?.bg || "bg-blue-50"} ${selectedProject.badgeColor?.text || "text-blue-700"} ${selectedProject.badgeColor?.border || "border-blue-200"}`}
                 >
                   {selectedProject.category}
                 </span>
@@ -589,7 +602,7 @@ export default function PortfolioSection() {
                     <span>Latar Belakang & Deskripsi Studi Kasus</span>
                   </h4>
                   <p className="text-slate-700 text-sm sm:text-base leading-relaxed font-normal">
-                    {selectedProject.fullDescription}
+                    {selectedProject.fullDescription || selectedProject.description}
                   </p>
                 </div>
 
@@ -600,7 +613,7 @@ export default function PortfolioSection() {
                     <span>Dampak Bisnis & Hasil Utama (Outcomes)</span>
                   </h4>
                   <ul className="space-y-2">
-                    {selectedProject.outcomes.map((outcome, idx) => (
+                    {(selectedProject.outcomes || []).map((outcome, idx) => (
                       <li key={idx} className="flex items-start space-x-2.5 text-slate-800 text-xs sm:text-sm leading-snug">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
                         <span>{outcome}</span>
@@ -616,7 +629,7 @@ export default function PortfolioSection() {
                     <span>Deliverables & Output Strategis</span>
                   </h4>
                   <ul className="space-y-2">
-                    {selectedProject.deliverables.map((item, idx) => (
+                    {(selectedProject.deliverables || []).map((item, idx) => (
                       <li key={idx} className="flex items-start space-x-2.5 text-slate-800 text-xs sm:text-sm leading-snug">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
                         <span>{item}</span>

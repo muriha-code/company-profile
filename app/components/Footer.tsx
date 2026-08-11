@@ -198,7 +198,7 @@ export default function Footer() {
                                     onClick={(e) => scrollToSection(e, "services")}
                                     className="text-sky-100/90 hover:text-white hover:translate-x-1 inline-block transition-all duration-200"
                                 >
-                                    Management Compliance Services
+                                    Business Strategy
                                 </a>
                             </li>
                             <li>
@@ -207,7 +207,7 @@ export default function Footer() {
                                     onClick={(e) => scrollToSection(e, "services")}
                                     className="text-sky-100/90 hover:text-white hover:translate-x-1 inline-block transition-all duration-200"
                                 >
-                                    Business Management & Strategy
+                                    Financial Optimization
                                 </a>
                             </li>
                             <li>
@@ -216,7 +216,7 @@ export default function Footer() {
                                     onClick={(e) => scrollToSection(e, "services")}
                                     className="text-sky-100/90 hover:text-white hover:translate-x-1 inline-block transition-all duration-200"
                                 >
-                                    Sustainability Environmental Management
+                                    Operational Excellence
                                 </a>
                             </li>
                             <li>
@@ -225,7 +225,7 @@ export default function Footer() {
                                     onClick={(e) => scrollToSection(e, "services")}
                                     className="text-sky-100/90 hover:text-white hover:translate-x-1 inline-block transition-all duration-200"
                                 >
-                                    Design & Engineering Services
+                                    Leadership & Team
                                 </a>
                             </li>
                         </ul>
