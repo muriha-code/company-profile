@@ -568,14 +568,6 @@ export default function PortfolioSection() {
 
                 {/* Card Action Buttons */}
                 <div className="space-y-2.5">
-                  {/* Tombol Download Dokumen PDF */}
-                  <button
-                    onClick={() => handleConsultation(selectedProject.title)}
-                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 transition-all duration-200 flex items-center justify-center space-x-2 cursor-pointer text-xs sm:text-sm"
-                  >
-                    <FontAwesomeIcon icon={faDownload} className="w-4 h-4" />
-                    <span>Download Case Study PDF</span>
-                  </button>
 
                   {/* Tombol Konsultasi WhatsApp */}
                   <button
