@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { CldImage } from "next-cloudinary";
 
 // Self-contained SVG Icon Components (No external dependencies required)
 function PhoneIcon({ className = "w-5 h-5" }: { className?: string }) {
@@ -95,14 +96,15 @@ export default function Footer() {
                             onClick={(e) => scrollToSection(e, "home")}
                             className="relative block h-12 w-52 sm:h-14 sm:w-60 lg:h-16 lg:w-72 group focus:outline-none"
                         >
-                            <Image
-                                src="/logos/growthline-light.png"
-                                alt="GrowthLine Consulting Logo"
-                                fill
-                                sizes="(max-width: 640px) 208px, (max-width: 1024px) 240px, 288px"
-                                className="object-contain object-left"
-                                priority
-                            />
+                            <div className="w-52 sm:w-64">
+                                <CldImage
+                                    src="growthline-light_crqr08"
+                                    alt="GrowthLine Consulting Logo"
+                                    width={288}
+                                    height={80}
+                                    className="w-full h-auto object-contain object-left"
+                                />
+                            </div>
                         </Link>
 
                         <p className="text-sky-100/90 text-sm leading-relaxed font-normal">

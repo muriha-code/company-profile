@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { CldImage } from "next-cloudinary";
 
 export default function Hero() {
   const scrollToSection = (targetId: string) => {
@@ -15,10 +16,10 @@ export default function Hero() {
       id="home"
       className="relative w-full min-h-[calc(100vh-140px)] sm:min-h-[calc(100vh-160px)] lg:min-h-[calc(100vh-180px)] flex items-center justify-center pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20 scroll-mt-20 overflow-hidden bg-slate-950"
     >
-      {/* 1. LAYER 0: Background Image (next/image dengan fill & object-cover) */}
+      {/* 1. LAYER 0: Background Image */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/hero-bg.jpg"
+        <CldImage
+          src="hero-bg_evwycr"
           alt="GrowthLine Consulting Hero Background"
           fill
           priority

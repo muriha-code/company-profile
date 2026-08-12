@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { CldImage } from "next-cloudinary";
 
 // ============================================================================
 // KONFIGURASI WHATSAPP & NAVIGASI (Dapat diubah sesuai kebutuhan)
@@ -94,13 +95,12 @@ export default function Navbar() {
           onClick={(e) => scrollToSection(e, "home")}
           className="relative block h-10 w-44 sm:h-12 sm:w-56 group focus:outline-none"
         >
-          <Image
-            src={isScrolled ? "/logos/growthline-dark.png" : "/logos/growthline-light.png"}
+          <CldImage
+            src={isScrolled ? "growthline-dark_eosfg5" : "growthline-light_crqr08"}
             alt="GrowthLine Consulting Logo"
-            fill
-            sizes="(max-width: 640px) 176px, 224px"
-            className="object-contain object-left origin-left transition-all duration-300"
-            priority
+            width={224}
+            height={64}
+            className="w-32 sm:w-40 h-auto object-contain object-left origin-left transition-all duration-300"
           />
         </Link>
 
