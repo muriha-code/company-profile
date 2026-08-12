@@ -16,10 +16,14 @@ import {
   faClock,
   faFolderOpen,
   faLayerGroup,
+  faSpinner,
+  faExclamationTriangle,
+  faRedo,
 } from "@fortawesome/free-solid-svg-icons";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { getWhatsAppUrl, WHATSAPP_PHONE } from "./Navbar";
 import { getPortfoliosFromFirestore } from "@/lib/services/portfolioService";
+import { CldImage } from "next-cloudinary";
 
 // Definisi interface data portofolio terperinci
 export interface PortfolioItem {
@@ -45,208 +49,6 @@ export interface PortfolioItem {
   };
 }
 
-// Data portofolio terstruktur secara modular dengan rincian lengkap untuk modal
-export const portfolioData: PortfolioItem[] = [
-  {
-    id: "fintech-restructuring",
-    category: "Financial Strategy",
-    categorySlug: "financial",
-    title: "FinTech Scaleup Financial Restructuring",
-    client: "PayPulse Solutions",
-    description:
-      "Optimalisasi alokasi modal dan pemodelan proyeksi keuangan terpadu untuk persiapan pendanaan Seri B skala regional.",
-    fullDescription:
-      "PayPulse Solutions mengalami pertumbuhan pengguna yang sangat cepat namun menghadapi tantangan dalam efisiensi alokasi modal dan proyeksi arus kas. GrowthLine Consulting melakukan audit finansial mendalam, menyusun model proyeksi 5 tahun berbasis skenario dinamis, serta mendesain strategi restrukturisasi beban operasional untuk meningkatkan valuasi perusahaan menjelang proses pendanaan Seri B.",
-    outcomes: [
-      "Pertumbuhan Revenue YoY meningkat signifikan hingga +240%",
-      "Pengurangan rasio burn rate operasional bulanan sebesar 28%",
-      "Keberhasilan penggalangan dana Seri B sebesar $15 Juta tepat waktu",
-    ],
-    deliverables: [
-      "Laporan Model Keuangan & Proyeksi Arus Kas 5 Tahun",
-      "Dokumen Evaluasi Valuation & Audit Unit Economics",
-      "Executive Pitch Deck & Data Room Investor Seri B",
-    ],
-    timeline: "4 Bulan (Q1 - Q2)",
-    documentUrl: "#",
-    image:
-      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop",
-    metric: "+240%",
-    metricLabel: "Pertumbuhan Revenue YoY",
-    tags: ["Financial Audit", "Capital Raising", "Cost Efficiency"],
-    badgeColor: {
-      bg: "bg-emerald-50",
-      text: "text-emerald-700",
-      border: "border-emerald-200",
-    },
-  },
-  {
-    id: "supply-chain-audit",
-    category: "Operations",
-    categorySlug: "operations",
-    title: "Supply Chain & Regional Logistics Audit",
-    client: "LogiGlobal Tech",
-    description:
-      "Transformasi alur kerja pergudangan dan otomatisasi rute distribusi logistik antar-pulau.",
-    fullDescription:
-      "LogiGlobal Tech menghadapi kendala ketidakseimbangan inventoris di gudang cabang serta keterlambatan pengiriman logistik antar-pulau. Tim GrowthLine melakukan analisis pemetaan rantai pasok dari hulu ke hilir, mendesain ulang SOP pengelolaan gudang, serta menerapkan algoritma perutean distribusi otomatis guna memangkas biaya transportasi.",
-    outcomes: [
-      "Pengurangan total biaya operasional logistik sebesar 35%",
-      "Peningkatan kecepatan pemenuhan pesanan (order fulfillment) sebesar 45%",
-      "Penurunan angka kerusakan barang saat transit hingga 0.2%",
-    ],
-    deliverables: [
-      "Peta Strategi & Blue Print Rantai Pasok Logistik",
-      "Buku Panduan Standar Operasional Prosedur (SOP) Pergudangan",
-      "Dashboard Pemantauan Rute Distribusi Real-Time",
-    ],
-    timeline: "3 Bulan (Q2 - Q3)",
-    documentUrl: "#",
-    image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=800&auto=format&fit=crop",
-    metric: "35%",
-    metricLabel: "Pengurangan Biaya Operasional",
-    tags: ["Logistics Optimization", "SOP Re-engineering", "Automation"],
-    badgeColor: {
-      bg: "bg-amber-50",
-      text: "text-amber-700",
-      border: "border-amber-200",
-    },
-  },
-  {
-    id: "retail-expansion",
-    category: "Market Expansion",
-    categorySlug: "expansion",
-    title: "Omnichannel Regional Retail Expansion",
-    client: "OmniStore Retail",
-    description:
-      "Riset pasar komprehensif dan strategi eksekusi penetrasi gerai fisik di 12 kota strategis secara serentak.",
-    fullDescription:
-      "OmniStore Retail berencana memperluas jangkauan jaringan toko fisik ke kota-kota tier-2 dan tier-3 secara efektif. GrowthLine melakukan studi kelayakan pasar regional, analisis demografi lokal, penetapan lokasi potensial berbasis data trafik, serta memandu strategi pemasaran launching terintegrasi online-to-offline.",
-    outcomes: [
-      "12 Cabang Baru Berhasil Dioperasikan Tepat Waktu dalam 6 bulan",
-      "Pencapaian titik impas (BEP) gerai 2 bulan lebih cepat dari target awal",
-      "Peningkatan kesadaran merek (brand awareness) regional sebesar 65%",
-    ],
-    deliverables: [
-      "Dokumen Riset Studi Kelayakan Pasar di 12 Kota Tujuan",
-      "Kriteria & Framework Pemilihan Lokasi Strategis (Site Selection)",
-      "Playbook Peluncuran Gerai Omnichannel & Program Promosi",
-    ],
-    timeline: "6 Bulan (Q1 - Q3)",
-    documentUrl: "#",
-    image:
-      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop",
-    metric: "12 Kota",
-    metricLabel: "Cabang Baru Berhasil Dioperasikan",
-    tags: ["Market Feasibility", "Site Selection", "Go-To-Market"],
-    badgeColor: {
-      bg: "bg-blue-50",
-      text: "text-blue-700",
-      border: "border-blue-200",
-    },
-  },
-  {
-    id: "digital-transformation",
-    category: "Digital Transformation",
-    categorySlug: "digital",
-    title: "Enterprise ERP & Workflow Integration",
-    client: "Nusantara Manufacturing Group",
-    description:
-      "Migrasi sistem warisan ke platform ERP terintegrasi berbasis data analitik real-time untuk 3 pabrik utama.",
-    fullDescription:
-      "Nusantara Manufacturing Group menghadapi fragmentasi data pada 3 unit pabrik utama yang memperlambat laporan keputusan eksekutif. GrowthLine bertindak sebagai konsultan pendamping migrasi digital, merancang arsitektur ERP terpadu, serta mendampingi manajemen perubahan staf pabrik.",
-    outcomes: [
-      "Peningkatan kecepatan konsolidasi data operasional hingga 4.2x",
-      "Eliminasi ganda data (data redundancy) antar divisi sebesar 95%",
-      "Transparansi pelaporan stok bahan baku dan jadwal produksi secara real-time",
-    ],
-    deliverables: [
-      "Peta Jalan (Roadmap) Transformasi Digital Manufaktur",
-      "Arsitektur Integrasi ERP & Modul Produksi",
-      "Modul Pelatihan Manajemen Perubahan Staf Operasional",
-    ],
-    timeline: "5 Bulan (Q2 - Q4)",
-    documentUrl: "#",
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop",
-    metric: "4.2x",
-    metricLabel: "Kecepatan Pengolahan Data ERP",
-    tags: ["Digital Roadmap", "ERP Integration", "Data Analytics"],
-    badgeColor: {
-      bg: "bg-purple-50",
-      text: "text-purple-700",
-      border: "border-purple-200",
-    },
-  },
-  {
-    id: "leadership-culture",
-    category: "Leadership & Team",
-    categorySlug: "leadership",
-    title: "Executive Leadership Alignment & Culture",
-    client: "AeroTech Holdings",
-    description:
-      "Penyelarasan kembali struktur manajerial senior dan pembentukan sistem evaluasi kinerja berbasis OKR modern.",
-    fullDescription:
-      "Pasca merger perusahaan, AeroTech Holdings menghadapi tantangan dalam penyelarasan visi antar pimpinan eksekutif dan penurunan motivasi kerja tim manajerial. GrowthLine memfasilitasi sesi executive alignment, membentuk matriks Kinerja OKR transparan, serta merancang ulang sistem retensi talenta.",
-    outcomes: [
-      "Skor retensi talenta kunci manajerial meningkat hingga 92%",
-      "Pencapaian target OKR bulanan naik dari 68% menjadi 91%",
-      "Peningkatan kepuasan iklim kerja eksekutif sebesar 40%",
-    ],
-    deliverables: [
-      "Matriks Kerangka Kerja OKR & Sistem Evaluasi Kinerja Eksekutif",
-      "Buku Panduan Budaya Perusahaan (Company Culture Playbook)",
-      "Modul Executive Coaching & Alignment Workshop",
-    ],
-    timeline: "3 Bulan (Q3 - Q4)",
-    documentUrl: "#",
-    image:
-      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop",
-    metric: "92%",
-    metricLabel: "Skor Retensi Talenta Kunci",
-    tags: ["Executive Coaching", "OKR Framework", "Culture Transformation"],
-    badgeColor: {
-      bg: "bg-rose-50",
-      text: "text-rose-700",
-      border: "border-rose-200",
-    },
-  },
-  {
-    id: "corporate-strategy",
-    category: "Financial Strategy",
-    categorySlug: "financial",
-    title: "Healthcare Provider Turnaround Strategy",
-    client: "Medica Health Systems",
-    description:
-      "Restrukturisasi portofolio produk medis dan optimalisasi unit bisnis untuk meningkatkan profit marjin.",
-    fullDescription:
-      "Medica Health Systems mengalami penurunan marjin profitabilitas akibat ketidakseimbangan alokasi aset medis dan biaya operasional klinik. GrowthLine menyusun strategi penyehatan (turnaround plan), merestrukturisasi portofolio unit bisnis, serta mengoptimalkan harga dan efisiensi pengadaan pasokan kesehatan.",
-    outcomes: [
-      "Peningkatan EBITDA Margin sebesar +180 Bps dalam satu tahun fiskal",
-      "Optimalisasi tingkat okupansi dan utilitas fasilitas medis sebesar 88%",
-      "Peningkatan arus kas operasional bersih hingga 32%",
-    ],
-    deliverables: [
-      "Rencana Strategis Penyehatan Bisnis (Business Turnaround Plan)",
-      "Analisis Margin Profitabilitas Portofolio Layanan Kesehatan",
-      "SOP Efisiensi Pengadaan Peralatan & Obat-obatan",
-    ],
-    timeline: "4 Bulan (Q1 - Q2)",
-    documentUrl: "#",
-    image:
-      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=800&auto=format&fit=crop",
-    metric: "+180 Bps",
-    metricLabel: "Peningkatan EBITDA Margin",
-    tags: ["Business Turnaround", "Portfolio Audit", "Growth Strategy"],
-    badgeColor: {
-      bg: "bg-indigo-50",
-      text: "text-indigo-700",
-      border: "border-indigo-200",
-    },
-  },
-];
-
 // Daftar kategori untuk tab filter
 const categories = [
   { label: "Semua Studi Kasus", slug: "all" },
@@ -259,19 +61,29 @@ const categories = [
 const ITEMS_PER_PAGE = 3;
 
 export default function PortfolioSection() {
-  const [items, setItems] = useState<PortfolioItem[]>(portfolioData);
+  const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedProject, setSelectedProject] = useState<PortfolioItem | null>(null);
 
   // Load data portofolio dari Cloud Firestore secara otomatis
-  useEffect(() => {
-    async function loadPortfolios() {
+  const loadPortfolios = async () => {
+    try {
+      setLoading(true);
+      setError(null);
       const data = await getPortfoliosFromFirestore();
-      if (data && data.length > 0) {
-        setItems(data);
-      }
+      setItems(data);
+    } catch (err) {
+      console.error("Gagal mengambil data portofolio dari Firestore:", err);
+      setError("Gagal memuat data portofolio dari Firestore. Silakan periksa koneksi Anda.");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     loadPortfolios();
   }, []);
 
@@ -368,11 +180,10 @@ export default function PortfolioSection() {
               <button
                 key={cat.slug}
                 onClick={() => handleCategoryChange(cat.slug)}
-                className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer ${
-                  activeCategory === cat.slug
+                className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer ${activeCategory === cat.slug
                     ? "bg-slate-900 text-white shadow-md shadow-slate-900/20 scale-105"
                     : "bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/80"
-                }`}
+                  }`}
               >
                 {cat.label}
               </button>
@@ -381,69 +192,117 @@ export default function PortfolioSection() {
         </div>
 
         {/* Portfolio Grid Layout: 1 col (Mobile), 2 cols (Tablet), 3 cols (Desktop) */}
-        <div id="portfolio-grid" className="scroll-mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {currentItems.map((item) => (
-            <article
-              key={item.id}
-              className="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-300/80 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
-            >
-              <div>
-                {/* Visual Image Container dengan next/image fill & object-cover */}
-                <div className="relative w-full h-52 sm:h-56 bg-slate-100 overflow-hidden">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                    loading="lazy"
-                  />
-                  {/* Dark Overlay Subtle Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
-
-                  {/* Kapsul Tag / Badge Kategori */}
-                  <div className="absolute top-4 left-4 z-10">
-                    <span
-                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-md shadow-sm ${item.badgeColor?.bg || "bg-blue-50"} ${item.badgeColor?.text || "text-blue-700"} ${item.badgeColor?.border || "border-blue-200"}`}
-                    >
-                      {item.category}
-                    </span>
-                  </div>
-
-                  {/* Klien Tag di atas Overlay */}
-                  <div className="absolute bottom-3 left-4 z-10 text-white/90 text-xs font-semibold tracking-wide flex items-center space-x-1.5">
-                    <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-                    <span>{item.client}</span>
-                  </div>
-                </div>
-
-                {/* Konten Kartu (Title & Description saja) */}
-                <div className="p-6 sm:p-7">
-                  <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2 leading-snug">
-                    {item.title}
-                  </h3>
-                  <p className="text-slate-600 text-sm leading-relaxed line-clamp-3">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Card Footer Action - Buka Modal Pop-up */}
-              <div className="px-6 sm:px-7 py-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-end mt-auto">
-                <button
-                  onClick={() => setSelectedProject(item)}
-                  aria-label={`Lihat detail studi kasus ${item.title}`}
-                  className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-800 hover:text-white transition-all duration-200 cursor-pointer py-2 px-4 rounded-xl bg-white hover:bg-blue-600 border border-slate-200 hover:border-blue-600 shadow-sm hover:shadow-md"
+        <div id="portfolio-grid" className="scroll-mt-24">
+          {loading ? (
+            /* Skeleton Loading Cards */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3].map((n) => (
+                <div
+                  key={n}
+                  className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm flex flex-col justify-between animate-pulse"
                 >
-                  <span>Lihat Detail</span>
-                  <FontAwesomeIcon
-                    icon={faExternalLinkAlt}
-                    className="w-3 h-3 transition-transform duration-200"
-                  />
-                </button>
-              </div>
-            </article>
-          ))}
+                  <div>
+                    <div className="w-full h-52 sm:h-56 bg-slate-200" />
+                    <div className="p-6 sm:p-7 space-y-3">
+                      <div className="h-6 bg-slate-200 rounded-md w-3/4" />
+                      <div className="h-4 bg-slate-100 rounded-md w-full" />
+                      <div className="h-4 bg-slate-100 rounded-md w-5/6" />
+                    </div>
+                  </div>
+                  <div className="px-6 sm:px-7 py-4 bg-slate-50/80 border-t border-slate-100 flex justify-end">
+                    <div className="h-8 bg-slate-200 rounded-xl w-28" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : error ? (
+            /* Error Fallback UI */
+            <div className="max-w-md mx-auto text-center p-8 bg-rose-50/80 border border-rose-200/80 rounded-2xl space-y-4">
+              <FontAwesomeIcon icon={faExclamationTriangle} className="w-10 h-10 text-rose-500 mx-auto" />
+              <p className="text-slate-800 text-sm font-medium">{error}</p>
+              <button
+                onClick={loadPortfolios}
+                className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 transition-colors shadow-sm cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faRedo} className="w-3 h-3" />
+                <span>Coba Lagi</span>
+              </button>
+            </div>
+          ) : currentItems.length === 0 ? (
+            /* Empty State */
+            <div className="max-w-md mx-auto text-center p-8 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-3">
+              <FontAwesomeIcon icon={faBriefcase} className="w-8 h-8 text-slate-400 mx-auto" />
+              <p className="text-slate-600 text-sm font-medium">
+                Belum ada studi kasus yang tersedia untuk kategori ini.
+              </p>
+            </div>
+          ) : (
+            /* Active Item Cards */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {currentItems.map((item) => (
+                <article
+                  key={item.id}
+                  className="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-300/80 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div>
+                    {/* Visual Image Container dengan next/image fill & object-cover */}
+                    <div className="relative w-full h-52 sm:h-56 bg-slate-100 overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                        loading="lazy"
+                      />
+                      {/* Dark Overlay Subtle Gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
+
+                      {/* Kapsul Tag / Badge Kategori */}
+                      <div className="absolute top-4 left-4 z-10">
+                        <span
+                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-md shadow-sm ${item.badgeColor?.bg || "bg-blue-50"} ${item.badgeColor?.text || "text-blue-700"} ${item.badgeColor?.border || "border-blue-200"}`}
+                        >
+                          {item.category}
+                        </span>
+                      </div>
+
+                      {/* Klien Tag di atas Overlay */}
+                      <div className="absolute bottom-3 left-4 z-10 text-white/90 text-xs font-semibold tracking-wide flex items-center space-x-1.5">
+                        <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                        <span>{item.client}</span>
+                      </div>
+                    </div>
+
+                    {/* Konten Kartu (Title & Description saja) */}
+                    <div className="p-6 sm:p-7">
+                      <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2 leading-snug">
+                        {item.title}
+                      </h3>
+                      <p className="text-slate-600 text-sm leading-relaxed line-clamp-3">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Card Footer Action - Buka Modal Pop-up */}
+                  <div className="px-6 sm:px-7 py-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-end mt-auto">
+                    <button
+                      onClick={() => setSelectedProject(item)}
+                      aria-label={`Lihat detail studi kasus ${item.title}`}
+                      className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-800 hover:text-white transition-all duration-200 cursor-pointer py-2 px-4 rounded-xl bg-white hover:bg-blue-600 border border-slate-200 hover:border-blue-600 shadow-sm hover:shadow-md"
+                    >
+                      <span>Lihat Detail</span>
+                      <FontAwesomeIcon
+                        icon={faExternalLinkAlt}
+                        className="w-3 h-3 transition-transform duration-200"
+                      />
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Kontrol Pagination (3 item per halaman) */}
@@ -462,11 +321,10 @@ export default function PortfolioSection() {
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-                currentPage === 1
+              className={`inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${currentPage === 1
                   ? "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200/60 opacity-70"
                   : "bg-white text-slate-700 hover:bg-slate-100 hover:text-blue-600 border border-slate-200 shadow-sm hover:shadow"
-              }`}
+                }`}
             >
               <FontAwesomeIcon icon={faChevronLeft} className="w-3 h-3" />
               <span>Sebelumnya</span>
@@ -478,11 +336,10 @@ export default function PortfolioSection() {
                 <button
                   key={pageNum}
                   onClick={() => handlePageChange(pageNum)}
-                  className={`w-9 h-9 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer flex items-center justify-center ${
-                    currentPage === pageNum
+                  className={`w-9 h-9 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer flex items-center justify-center ${currentPage === pageNum
                       ? "bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-105 font-extrabold"
                       : "bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/80"
-                  }`}
+                    }`}
                 >
                   {pageNum}
                 </button>
@@ -493,11 +350,10 @@ export default function PortfolioSection() {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className={`inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-                currentPage === totalPages
+              className={`inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${currentPage === totalPages
                   ? "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200/60 opacity-70"
                   : "bg-white text-slate-700 hover:bg-slate-100 hover:text-blue-600 border border-slate-200 shadow-sm hover:shadow"
-              }`}
+                }`}
             >
               <span>Selanjutnya</span>
               <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3" />

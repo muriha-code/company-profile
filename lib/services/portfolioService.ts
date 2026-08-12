@@ -1,10 +1,9 @@
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { PortfolioItem, portfolioData } from "@/app/components/PortfolioSection";
+import { PortfolioItem } from "@/app/components/PortfolioSection";
 
 /**
  * Fetch portfolio items from Firestore 'portfolios' collection.
- * Falls back to local static portfolioData if collection is empty or credentials are not yet set.
  */
 export async function getPortfoliosFromFirestore(): Promise<PortfolioItem[]> {
   try {
@@ -12,7 +11,7 @@ export async function getPortfoliosFromFirestore(): Promise<PortfolioItem[]> {
     const querySnapshot = await getDocs(q);
     
     if (querySnapshot.empty) {
-      return portfolioData;
+      return [];
     }
 
     const items: PortfolioItem[] = [];
@@ -22,7 +21,10 @@ export async function getPortfoliosFromFirestore(): Promise<PortfolioItem[]> {
 
     return items;
   } catch (error) {
-    console.warn("Firestore portfolio fetch error (using fallback static data):", error);
-    return portfolioData;
+    console.error("Firestore portfolio fetch error:", error);
+    return [];
   }
 }
+
+// Alias getPortfolios for consistency
+export const getPortfolios = getPortfoliosFromFirestore;
