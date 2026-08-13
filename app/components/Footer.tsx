@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { CldImage } from "next-cloudinary";
 
 // Self-contained SVG Icon Components (No external dependencies required)
@@ -17,7 +18,7 @@ function PhoneIcon({ className = "w-5 h-5" }: { className?: string }) {
 function MailIcon({ className = "w-5 h-5" }: { className?: string }) {
     return (
         <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 0-2 2v10a2 2 0 002 2z" />
         </svg>
     );
 }
@@ -66,6 +67,8 @@ function InstagramIcon({ className = "w-4 h-4" }: { className?: string }) {
 }
 
 export default function Footer() {
+    const router = useRouter();
+
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -83,6 +86,12 @@ export default function Footer() {
         }
     };
 
+    const handleLogoDoubleClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        router.push("/admin/login");
+    };
+
     return (
         <footer className="bg-gradient-to-br from-sky-800 via-sky-900 to-blue-950 text-white relative">
             {/* Container Utama 4 Kolom (Desktop 4 Kolom, Mobile Responsive 1 Kolom) */}
@@ -93,8 +102,9 @@ export default function Footer() {
                     <div className="space-y-5">
                         <Link
                             href="/"
-                            onClick={(e) => scrollToSection(e, "home")}
-                            className="relative block h-12 w-52 sm:h-14 sm:w-60 lg:h-16 lg:w-72 group focus:outline-none"
+                            onClick={(e) => e.preventDefault()}
+                            onDoubleClick={handleLogoDoubleClick}
+                            className="relative block h-12 w-52 sm:h-14 sm:w-60 lg:h-16 lg:w-72 group focus:outline-none cursor-pointer select-none"
                         >
                             <div className="w-52 sm:w-64">
                                 <CldImage
@@ -102,7 +112,7 @@ export default function Footer() {
                                     alt="GrowthLine Consulting Logo"
                                     width={288}
                                     height={80}
-                                    className="w-full h-auto object-contain object-left"
+                                    className="w-full h-auto object-contain object-left cursor-pointer"
                                 />
                             </div>
                         </Link>
