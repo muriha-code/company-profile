@@ -23,7 +23,7 @@ import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinaryClient
 import { slugify } from "@/lib/utils/slugify";
 import Pagination from "@/app/admin/components/Pagination";
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 4;
 import {
   getServices,
   createService,
@@ -506,35 +506,6 @@ export default function AdminServicesPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-extrabold uppercase tracking-wider text-slate-700">Gambar Layanan (Opsional - growthline/services)</label>
-                <div className="flex items-center space-x-3">
-                  <label className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl border border-slate-300 transition cursor-pointer flex items-center space-x-2">
-                    <FontAwesomeIcon icon={uploadingImage ? faSpinner : faUpload} className={uploadingImage ? "animate-spin" : ""} />
-                    <span>{uploadingImage ? "Mengunggah..." : "Unggah Gambar..."}</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      disabled={uploadingImage}
-                      className="hidden"
-                    />
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="URL gambar..."
-                    value={formData.image || ""}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    className="flex-1 px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-emerald-500"
-                  />
-                </div>
-                {formData.image && (
-                  <div className="mt-2 relative w-24 h-24 rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
-                    <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
                 <label className="text-xs font-extrabold uppercase tracking-wider text-slate-700">Skema Warna Tema</label>
                 <select
                   onChange={(e) => {
@@ -572,9 +543,10 @@ export default function AdminServicesPage() {
                   <button
                     type="button"
                     onClick={handleAddFeature}
-                    className="text-xs text-emerald-600 font-bold hover:underline cursor-pointer"
+                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-emerald-600/30 bg-emerald-50/50 hover:bg-emerald-600 hover:text-white text-emerald-700 text-xs font-bold transition cursor-pointer"
                   >
-                    + Tambah Fitur
+                    <FontAwesomeIcon icon={faPlus} className="w-3 h-3" />
+                    <span>Tambah Fitur</span>
                   </button>
                 </div>
                 {(formData.features || [""]).map((feat, idx) => (
@@ -589,9 +561,11 @@ export default function AdminServicesPage() {
                     <button
                       type="button"
                       onClick={() => handleRemoveFeature(idx)}
-                      className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg cursor-pointer"
+                      aria-label="Hapus fitur"
+                      title="Hapus fitur"
+                      className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition cursor-pointer"
                     >
-                      <FontAwesomeIcon icon={faTimes} className="w-3.5 h-3.5" />
+                      <FontAwesomeIcon icon={faTrash} className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ))}

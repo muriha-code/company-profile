@@ -16,6 +16,9 @@ import {
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { getWhatsAppUrl, WHATSAPP_PHONE, WHATSAPP_DEFAULT_MESSAGE } from "./Navbar";
 import { getServicesFromFirestore } from "@/lib/services/servicesService";
+import Pagination from "@/app/admin/components/Pagination";
+
+const ITEMS_PER_PAGE = 4;
 
 // Interface definisi data layanan
 export interface ServiceItem {
@@ -46,6 +49,7 @@ export default function ServicesSection() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const loadServices = async () => {
     try {
@@ -64,6 +68,12 @@ export default function ServicesSection() {
   useEffect(() => {
     loadServices();
   }, []);
+
+  const totalPages = Math.ceil(services.length / ITEMS_PER_PAGE) || 1;
+  const paginatedServices = services.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   return (
     <section
@@ -129,88 +139,99 @@ export default function ServicesSection() {
             <p className="text-slate-600 text-sm font-medium">Belum ada layanan yang tersedia.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {services.map((service) => (
-              <div
-                key={service.id}
-                className={`group bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/80 transition-all duration-300 shadow-sm hover:shadow-xl ${service.colorScheme.borderHover} flex flex-col justify-between relative overflow-hidden`}
-              >
-                {/* Subtle Card Background Glow on Hover */}
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+              {paginatedServices.map((service) => (
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${service.colorScheme.glowBg} opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`}
-                />
+                  key={service.id}
+                  className={`group bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/80 transition-all duration-300 shadow-sm hover:shadow-xl ${service.colorScheme.borderHover} flex flex-col justify-between relative overflow-hidden`}
+                >
+                  {/* Subtle Card Background Glow on Hover */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${service.colorScheme.glowBg} opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`}
+                  />
 
-                <div className="relative z-10">
-                  {/* Header Card: Icon Wrapper & Badge */}
-                  <div className="flex items-center justify-between mb-6">
-                    <div
-                      className={`w-14 h-14 rounded-xl ${service.colorScheme.iconBg} flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-sm`}
-                    >
-                      <FontAwesomeIcon
-                        icon={service.icon}
-                        className={`w-7 h-7 ${service.colorScheme.iconColor} transition-colors duration-300`}
-                      />
+                  <div className="relative z-10">
+                    {/* Header Card: Icon Wrapper & Badge */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div
+                        className={`w-14 h-14 rounded-xl ${service.colorScheme.iconBg} flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-sm`}
+                      >
+                        <FontAwesomeIcon
+                          icon={service.icon}
+                          className={`w-7 h-7 ${service.colorScheme.iconColor} transition-colors duration-300`}
+                        />
+                      </div>
+
+                      <span
+                        className={`text-[11px] font-semibold px-2.5 py-1 rounded-md border ${service.colorScheme.badgeBg}`}
+                      >
+                        {service.badgeText}
+                      </span>
                     </div>
 
-                    <span
-                      className={`text-[11px] font-semibold px-2.5 py-1 rounded-md border ${service.colorScheme.badgeBg}`}
-                    >
-                      {service.badgeText}
-                    </span>
-                  </div>
+                    {/* Title & Subtitle */}
+                    <h3 className="text-xl font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors duration-200">
+                      {service.title}
+                    </h3>
+                    <p className="text-xs font-semibold text-slate-400 mb-4 tracking-wide uppercase">
+                      {service.subtitle}
+                    </p>
 
-                  {/* Title & Subtitle */}
-                  <h3 className="text-xl font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors duration-200">
-                    {service.title}
-                  </h3>
-                  <p className="text-xs font-semibold text-slate-400 mb-4 tracking-wide uppercase">
-                    {service.subtitle}
-                  </p>
+                    {/* Description */}
+                    <p className="text-slate-600 text-sm leading-relaxed mb-6">
+                      {service.description}
+                    </p>
 
-                  {/* Description */}
-                  <p className="text-slate-600 text-sm leading-relaxed mb-6">
-                    {service.description}
-                  </p>
-
-                  {/* Features List */}
-                  <div className="border-t border-slate-100 pt-5 mb-6">
-                    <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">
-                      Cakupan Layanan Utama
-                    </div>
-                    <ul className="space-y-2.5">
-                      {service.features.map((feature, fIdx) => (
-                        <li
-                          key={fIdx}
-                          className="text-xs text-slate-700 font-medium flex items-start space-x-2"
-                        >
-                          <div
-                            className={`w-4 h-4 rounded-full ${service.colorScheme.bulletColor} flex items-center justify-center flex-shrink-0 mt-0.5`}
+                    {/* Features List */}
+                    <div className="border-t border-slate-100 pt-5 mb-6">
+                      <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">
+                        Cakupan Layanan Utama
+                      </div>
+                      <ul className="space-y-2.5">
+                        {service.features.map((feature, fIdx) => (
+                          <li
+                            key={fIdx}
+                            className="text-xs text-slate-700 font-medium flex items-start space-x-2"
                           >
-                            <FontAwesomeIcon icon={faCheck} className="w-2.5 h-2.5" />
-                          </div>
-                          <span className="leading-snug">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
+                            <div
+                              className={`w-4 h-4 rounded-full ${service.colorScheme.bulletColor} flex items-center justify-center flex-shrink-0 mt-0.5`}
+                            >
+                              <FontAwesomeIcon icon={faCheck} className="w-2.5 h-2.5" />
+                            </div>
+                            <span className="leading-snug">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Card Footer Action */}
+                  <div className="relative z-10 pt-4 border-t border-slate-100">
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-between text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors duration-200 group/btn py-1"
+                    >
+                      <span>Konsultasikan Layanan</span>
+                      <div className="w-6 h-6 rounded-full bg-slate-100 group-hover:bg-blue-600 group-hover:text-white flex items-center justify-center transition-all duration-200 group-hover/btn:translate-x-1">
+                        <FontAwesomeIcon icon={faArrowRight} className="w-3 h-3" />
+                      </div>
+                    </a>
                   </div>
                 </div>
+              ))}
+            </div>
 
-                {/* Card Footer Action */}
-                <div className="relative z-10 pt-4 border-t border-slate-100">
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-between text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors duration-200 group/btn py-1"
-                  >
-                    <span>Konsultasikan Layanan</span>
-                    <div className="w-6 h-6 rounded-full bg-slate-100 group-hover:bg-blue-600 group-hover:text-white flex items-center justify-center transition-all duration-200 group-hover/btn:translate-x-1">
-                      <FontAwesomeIcon icon={faArrowRight} className="w-3 h-3" />
-                    </div>
-                  </a>
-                </div>
-              </div>
-            ))}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={services.length}
+              itemsPerPage={ITEMS_PER_PAGE}
+              itemLabel="layanan"
+              onPageChange={(p) => setCurrentPage(p)}
+            />
           </div>
         )}
 

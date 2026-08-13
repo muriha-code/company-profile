@@ -615,21 +615,8 @@ export default function AdminPortfoliosPage() {
                   />
                 </div>
 
-                {/* Metric & Label */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
-                    Nilai Metric (Opsional)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="misal: +240%"
-                    value={formData.metric || ""}
-                    onChange={(e) => setFormData({ ...formData, metric: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
+                {/* Label Metric */}
+                <div className="space-y-1.5 sm:col-span-2">
                   <label className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
                     Label Metric (Opsional)
                   </label>
@@ -652,9 +639,10 @@ export default function AdminPortfoliosPage() {
                   <button
                     type="button"
                     onClick={() => handleAddArrayItem("outcomes")}
-                    className="text-xs text-blue-600 font-bold hover:underline cursor-pointer"
+                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-blue-600/30 bg-blue-50/50 hover:bg-blue-600 hover:text-white text-blue-700 text-xs font-bold transition cursor-pointer"
                   >
-                    + Tambah Outcome
+                    <FontAwesomeIcon icon={faPlus} className="w-3 h-3" />
+                    <span>Tambah Outcome</span>
                   </button>
                 </div>
                 {(formData.outcomes || [""]).map((outcome, idx) => (
@@ -669,9 +657,11 @@ export default function AdminPortfoliosPage() {
                     <button
                       type="button"
                       onClick={() => handleRemoveArrayItem("outcomes", idx)}
-                      className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg cursor-pointer"
+                      aria-label="Hapus outcome"
+                      title="Hapus outcome"
+                      className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition cursor-pointer"
                     >
-                      <FontAwesomeIcon icon={faTimes} className="w-3.5 h-3.5" />
+                      <FontAwesomeIcon icon={faTrash} className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ))}
@@ -686,9 +676,10 @@ export default function AdminPortfoliosPage() {
                   <button
                     type="button"
                     onClick={() => handleAddArrayItem("deliverables")}
-                    className="text-xs text-blue-600 font-bold hover:underline cursor-pointer"
+                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-blue-600/30 bg-blue-50/50 hover:bg-blue-600 hover:text-white text-blue-700 text-xs font-bold transition cursor-pointer"
                   >
-                    + Tambah Deliverable
+                    <FontAwesomeIcon icon={faPlus} className="w-3 h-3" />
+                    <span>Tambah Deliverable</span>
                   </button>
                 </div>
                 {(formData.deliverables || [""]).map((deliv, idx) => (
@@ -703,9 +694,11 @@ export default function AdminPortfoliosPage() {
                     <button
                       type="button"
                       onClick={() => handleRemoveArrayItem("deliverables", idx)}
-                      className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg cursor-pointer"
+                      aria-label="Hapus deliverable"
+                      title="Hapus deliverable"
+                      className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition cursor-pointer"
                     >
-                      <FontAwesomeIcon icon={faTimes} className="w-3.5 h-3.5" />
+                      <FontAwesomeIcon icon={faTrash} className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ))}

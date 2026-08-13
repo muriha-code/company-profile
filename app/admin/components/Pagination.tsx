@@ -21,7 +21,7 @@ export default function Pagination({
   itemLabel = "data",
   onPageChange,
 }: PaginationProps) {
-  if (totalItems === 0) return null;
+  if (totalItems <= itemsPerPage || totalPages <= 1) return null;
 
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
@@ -64,11 +64,12 @@ export default function Pagination({
           <button
             type="button"
             onClick={() => onPageChange(currentPage - 1)}
+            aria-label="Halaman sebelumnya"
             disabled={currentPage === 1}
             className="px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 disabled:cursor-not-allowed font-bold transition flex items-center space-x-1.5 cursor-pointer shadow-sm"
           >
             <FontAwesomeIcon icon={faChevronLeft} className="w-3 h-3" />
-            <span className="hidden sm:inline">Previous</span>
+            <span>Sebelumnya</span>
           </button>
 
           {/* Page Numbers */}
@@ -87,6 +88,8 @@ export default function Pagination({
                 key={page}
                 type="button"
                 onClick={() => onPageChange(page)}
+                aria-label={`Halaman ${page}`}
+                aria-current={isActive ? "page" : undefined}
                 className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer flex items-center justify-center ${
                   isActive
                     ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
@@ -102,10 +105,11 @@ export default function Pagination({
           <button
             type="button"
             onClick={() => onPageChange(currentPage + 1)}
+            aria-label="Halaman berikutnya"
             disabled={currentPage === totalPages}
             className="px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 disabled:cursor-not-allowed font-bold transition flex items-center space-x-1.5 cursor-pointer shadow-sm"
           >
-            <span className="hidden sm:inline">Next</span>
+            <span>Selanjutnya</span>
             <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3" />
           </button>
         </div>
