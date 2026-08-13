@@ -147,24 +147,6 @@ export default function ServicesSection() {
                   />
 
                   <div className="relative z-10">
-                    {/* Header Card: Icon Wrapper & Badge */}
-                    <div className="flex items-center justify-between mb-6">
-                      <div
-                        className={`w-14 h-14 rounded-xl ${service.colorScheme.iconBg} flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-sm`}
-                      >
-                        <FontAwesomeIcon
-                          icon={service.icon}
-                          className={`w-7 h-7 ${service.colorScheme.iconColor} transition-colors duration-300`}
-                        />
-                      </div>
-
-                      <span
-                        className={`text-[11px] font-semibold px-2.5 py-1 rounded-md border ${service.colorScheme.badgeBg}`}
-                      >
-                        {service.badgeText}
-                      </span>
-                    </div>
-
                     {/* Title & Subtitle */}
                     <h3 className="text-xl font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors duration-200">
                       {service.title}
