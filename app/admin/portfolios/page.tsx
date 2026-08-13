@@ -375,7 +375,6 @@ export default function AdminPortfoliosPage() {
                     <th className="py-3.5 px-5">Gambar</th>
                     <th className="py-3.5 px-5">Judul & Klien</th>
                     <th className="py-3.5 px-5">Kategori</th>
-                    <th className="py-3.5 px-5">Metric / Hasil</th>
                     <th className="py-3.5 px-5 text-right">Aksi</th>
                   </tr>
                 </thead>
@@ -407,16 +406,6 @@ export default function AdminPortfoliosPage() {
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold border ${item.badgeColor?.bg || "bg-blue-50"} ${item.badgeColor?.text || "text-blue-700"} ${item.badgeColor?.border || "border-blue-200"}`}>
                           {item.category}
                         </span>
-                      </td>
-                      <td className="py-4 px-5">
-                        {item.metric ? (
-                          <div>
-                            <span className="font-extrabold text-emerald-600">{item.metric}</span>
-                            <span className="text-[11px] text-slate-500 block">{item.metricLabel}</span>
-                          </div>
-                        ) : (
-                          <span className="text-slate-400 text-xs">-</span>
-                        )}
                       </td>
                       <td className="py-4 px-5 text-right space-x-2">
                         <button
