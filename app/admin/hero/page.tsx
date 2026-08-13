@@ -13,11 +13,13 @@ import {
   faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import { getHero, updateHeroInFirestore, HeroData } from "@/lib/services/heroService";
+import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinaryClient";
 
 export default function AdminHeroPage() {
   const [heroData, setHeroData] = useState<HeroData>({
-    src: "hero-bg_evwycr",
-    cloudinary: true,
+    src: "",
+    publicId: "",
+    cloudinary: false,
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -37,8 +39,14 @@ export default function AdminHeroPage() {
     try {
       setLoading(true);
       const data = await getHero();
-      if (data && data.src) {
+      if (data) {
         setHeroData(data);
+      } else {
+        setHeroData({
+          src: "hero-bg_evwycr",
+          publicId: "",
+          cloudinary: true,
+        });
       }
     } catch (err) {
       console.error("Gagal memuat data hero:", err);
@@ -62,24 +70,25 @@ export default function AdminHeroPage() {
 
     try {
       setUploading(true);
-      const uploadFormData = new FormData();
-      uploadFormData.append("file", file);
+      const customSlug = "hero-main";
 
-      const res = await fetch("/api/cloudinary/upload", {
-        method: "POST",
-        body: uploadFormData,
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Gagal mengunggah gambar ke Cloudinary");
+      // Delete old asset from Cloudinary if replacing with different publicId
+      const targetPublicId = `growthline/hero/${customSlug}`;
+      if (heroData.publicId && heroData.publicId !== targetPublicId) {
+        await deleteFromCloudinary(heroData.publicId);
       }
 
-      setHeroData({
-        src: data.url,
+      const res = await uploadToCloudinary(file, "growthline/hero", customSlug);
+
+      setHeroData((prev) => ({
+        ...prev,
+        src: res.url,
+        publicId: res.public_id,
+        slug: res.slug || customSlug,
+        folder: "growthline/hero",
         cloudinary: false,
-      });
-      showToast("Gambar baru berhasil diunggah ke Cloudinary!");
+      }));
+      showToast(`Gambar baru berhasil diunggah ke ${res.public_id}!`);
     } catch (err: any) {
       console.error("Upload error:", err);
       showToast(err.message || "Gagal mengunggah gambar", "error");
@@ -100,6 +109,8 @@ export default function AdminHeroPage() {
       const isPublicId = isCloudinaryPublicId(heroData.src);
       await updateHeroInFirestore({
         ...heroData,
+        slug: heroData.slug || "hero-main",
+        folder: "growthline/hero",
         cloudinary: isPublicId || heroData.cloudinary,
       });
       showToast("Latar belakang Hero berhasil disimpan ke Firestore!");

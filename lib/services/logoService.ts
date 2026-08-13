@@ -20,6 +20,9 @@ export interface ClientLogoInput {
   name: string;
   alt: string;
   src: string;
+  publicId?: string;
+  slug?: string;
+  folder?: string;
   width?: number;
   height?: number;
   cloudinary?: boolean;

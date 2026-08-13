@@ -26,11 +26,16 @@ import {
   ClientLogoInput,
 } from "@/lib/services/logoService";
 import { ClientLogo } from "@/app/components/ClientMarquee";
+import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinaryClient";
+import { slugify } from "@/lib/utils/slugify";
 
 const emptyFormState: ClientLogoInput & { id?: string } = {
   name: "",
   alt: "",
   src: "",
+  publicId: "",
+  slug: "",
+  folder: "growthline/logos",
   width: 170,
   height: 60,
   cloudinary: true,
@@ -96,6 +101,7 @@ export default function AdminLogosPage() {
       name: item.name || "",
       alt: item.alt || "",
       src: item.src || "",
+      publicId: item.publicId || "",
       width: item.width || 170,
       height: item.height || 60,
       cloudinary: item.cloudinary !== undefined ? item.cloudinary : true,
@@ -111,25 +117,25 @@ export default function AdminLogosPage() {
 
     try {
       setUploadingImage(true);
-      const uploadFormData = new FormData();
-      uploadFormData.append("file", file);
+      const customSlug = slugify(formData.name || file.name.split(".")[0]);
 
-      const res = await fetch("/api/cloudinary/upload", {
-        method: "POST",
-        body: uploadFormData,
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Gagal mengunggah logo ke Cloudinary");
+      // Delete previous Cloudinary image if publicId changed
+      const targetPublicId = `growthline/logos/${customSlug}`;
+      if (formData.publicId && formData.publicId !== targetPublicId) {
+        await deleteFromCloudinary(formData.publicId);
       }
+
+      const res = await uploadToCloudinary(file, "growthline/logos", customSlug);
 
       setFormData((prev) => ({
         ...prev,
-        src: data.url,
-        cloudinary: false, // direct secure_url standard image
+        src: res.url,
+        publicId: res.public_id,
+        slug: res.slug || customSlug,
+        folder: "growthline/logos",
+        cloudinary: false,
       }));
-      showToast("Logo berhasil diunggah ke Cloudinary!");
+      showToast(`Logo berhasil diunggah ke ${res.public_id}!`);
     } catch (err: any) {
       console.error("Upload error:", err);
       showToast(err.message || "Gagal mengunggah logo", "error");
@@ -147,8 +153,11 @@ export default function AdminLogosPage() {
 
     try {
       setSaving(true);
+      const logoSlug = formData.slug || slugify(formData.name);
       const payload = {
         ...formData,
+        slug: logoSlug,
+        folder: "growthline/logos",
         alt: formData.alt || `${formData.name} Logo`,
       };
 
@@ -186,6 +195,11 @@ export default function AdminLogosPage() {
     if (!deletingId) return;
     try {
       setIsDeleting(true);
+      const itemToDelete = logos.find((l) => l.id === deletingId);
+      if (itemToDelete?.publicId) {
+        await deleteFromCloudinary(itemToDelete.publicId);
+      }
+
       await deleteClientLogo(deletingId);
       showToast("Logo klien berhasil dihapus!");
       setDeletingId(null);

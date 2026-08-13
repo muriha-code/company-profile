@@ -6,6 +6,9 @@ const HERO_DOC_ID = "main";
 
 export interface HeroData {
   src: string;
+  publicId?: string;
+  slug?: string;
+  folder?: string;
   cloudinary?: boolean;
   updatedAt?: any;
 }

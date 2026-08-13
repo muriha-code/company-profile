@@ -39,6 +39,9 @@ export interface PortfolioItem {
   timeline?: string;
   documentUrl?: string;
   image: string;
+  imagePublicId?: string;
+  slug?: string;
+  folder?: string;
   metric?: string;
   metricLabel?: string;
   tags?: string[];

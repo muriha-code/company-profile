@@ -26,6 +26,10 @@ export interface ServiceItem {
   description: string;
   features: string[];
   badgeText: string;
+  image?: string;
+  imagePublicId?: string;
+  slug?: string;
+  folder?: string;
   colorScheme: {
     iconBg: string;
     iconColor: string;

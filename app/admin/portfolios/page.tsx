@@ -22,6 +22,8 @@ import {
   deletePortfolio,
 } from "@/lib/services/portfolioService";
 import { PortfolioItem } from "@/app/components/PortfolioSection";
+import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinaryClient";
+import { slugify } from "@/lib/utils/slugify";
 
 const CATEGORY_OPTIONS = [
   { label: "Financial Strategy", slug: "financial" },
@@ -41,14 +43,17 @@ const BADGE_COLOR_PRESETS = [
 ];
 
 const emptyFormState: Omit<PortfolioItem, "id"> & { id?: string } = {
-  title: "",
-  client: "",
   category: "Financial Strategy",
   categorySlug: "financial",
+  title: "",
+  client: "",
   description: "",
   fullDescription: "",
   timeline: "",
   image: "",
+  imagePublicId: "",
+  slug: "",
+  folder: "growthline/portfolio",
   metric: "",
   metricLabel: "",
   documentUrl: "#",
@@ -140,21 +145,24 @@ export default function AdminPortfoliosPage() {
 
     try {
       setUploadingImage(true);
-      const uploadFormData = new FormData();
-      uploadFormData.append("file", file);
+      const customSlug = slugify(formData.title || file.name.split(".")[0]);
 
-      const res = await fetch("/api/cloudinary/upload", {
-        method: "POST",
-        body: uploadFormData,
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Gagal mengunggah gambar ke Cloudinary");
+      // Delete previous Cloudinary image if publicId changed
+      const targetPublicId = `growthline/portfolio/${customSlug}`;
+      if (formData.imagePublicId && formData.imagePublicId !== targetPublicId) {
+        await deleteFromCloudinary(formData.imagePublicId);
       }
 
-      setFormData((prev) => ({ ...prev, image: data.url }));
-      showToast("Gambar berhasil diunggah ke Cloudinary!");
+      const data = await uploadToCloudinary(file, "growthline/portfolio", customSlug);
+
+      setFormData((prev) => ({
+        ...prev,
+        image: data.url,
+        imagePublicId: data.public_id,
+        slug: data.slug || customSlug,
+        folder: "growthline/portfolio",
+      }));
+      showToast(`Gambar berhasil diunggah ke ${data.public_id}!`);
     } catch (err: any) {
       console.error("Upload error:", err);
       showToast(err.message || "Gagal mengunggah gambar", "error");
@@ -172,9 +180,12 @@ export default function AdminPortfoliosPage() {
 
     try {
       setSaving(true);
+      const portfolioSlug = formData.slug || slugify(formData.title);
       // Clean up empty array values
       const cleanedData = {
         ...formData,
+        slug: portfolioSlug,
+        folder: "growthline/portfolio",
         outcomes: (formData.outcomes || []).filter((item) => item.trim() !== ""),
         deliverables: (formData.deliverables || []).filter((item) => item.trim() !== ""),
         tags: (formData.tags || []).filter((item) => item.trim() !== ""),
@@ -202,6 +213,11 @@ export default function AdminPortfoliosPage() {
     if (!deletingId) return;
     try {
       setIsDeleting(true);
+      const itemToDelete = portfolios.find((p) => p.id === deletingId);
+      if (itemToDelete?.imagePublicId) {
+        await deleteFromCloudinary(itemToDelete.imagePublicId);
+      }
+
       await deletePortfolio(deletingId);
       showToast("Portofolio berhasil dihapus!");
       setDeletingId(null);

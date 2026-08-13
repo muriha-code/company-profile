@@ -17,7 +17,10 @@ import {
   faUserGroup,
   faLightbulb,
   faCheck,
+  faUpload,
 } from "@fortawesome/free-solid-svg-icons";
+import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinaryClient";
+import { slugify } from "@/lib/utils/slugify";
 import {
   getServices,
   createService,
@@ -96,6 +99,8 @@ const emptyFormState: ServiceInputData & { id?: string } = {
   description: "",
   badgeText: "Layanan Utama",
   iconName: "faChartLine",
+  slug: "",
+  folder: "growthline/services",
   features: [""],
   colorScheme: COLOR_SCHEME_PRESETS[0].scheme,
 };
@@ -110,6 +115,7 @@ export default function AdminServicesPage() {
   const [editingItem, setEditingItem] = useState<ServiceItem | null>(null);
   const [formData, setFormData] = useState<ServiceInputData & { id?: string }>(emptyFormState);
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   // Delete State
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -160,10 +166,44 @@ export default function AdminServicesPage() {
       description: item.description || "",
       badgeText: item.badgeText || "Layanan",
       iconName: item.iconName || "faChartLine",
+      image: item.image || "",
+      imagePublicId: item.imagePublicId || "",
       features: item.features && item.features.length > 0 ? item.features : [""],
       colorScheme: item.colorScheme || COLOR_SCHEME_PRESETS[0].scheme,
     });
     setIsModalOpen(true);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setUploadingImage(true);
+      const customSlug = slugify(formData.title || file.name.split(".")[0]);
+
+      // Delete previous Cloudinary image if publicId changed
+      const targetPublicId = `growthline/services/${customSlug}`;
+      if (formData.imagePublicId && formData.imagePublicId !== targetPublicId) {
+        await deleteFromCloudinary(formData.imagePublicId);
+      }
+
+      const res = await uploadToCloudinary(file, "growthline/services", customSlug);
+
+      setFormData((prev) => ({
+        ...prev,
+        image: res.url,
+        imagePublicId: res.public_id,
+        slug: res.slug || customSlug,
+        folder: "growthline/services",
+      }));
+      showToast(`Gambar layanan berhasil diunggah ke ${res.public_id}!`);
+    } catch (err: any) {
+      console.error("Upload error:", err);
+      showToast(err.message || "Gagal mengunggah gambar", "error");
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -175,8 +215,11 @@ export default function AdminServicesPage() {
 
     try {
       setSaving(true);
+      const serviceSlug = formData.slug || slugify(formData.title);
       const cleanedData = {
         ...formData,
+        slug: serviceSlug,
+        folder: "growthline/services",
         features: (formData.features || []).filter((f) => f.trim() !== ""),
       };
 
@@ -202,6 +245,11 @@ export default function AdminServicesPage() {
     if (!deletingId) return;
     try {
       setIsDeleting(true);
+      const itemToDelete = services.find((s) => s.id === deletingId);
+      if (itemToDelete?.imagePublicId) {
+        await deleteFromCloudinary(itemToDelete.imagePublicId);
+      }
+
       await deleteService(deletingId);
       showToast("Layanan berhasil dihapus!");
       setDeletingId(null);
@@ -424,6 +472,35 @@ export default function AdminServicesPage() {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-extrabold uppercase tracking-wider text-slate-700">Gambar Layanan (Opsional - growthline/services)</label>
+                <div className="flex items-center space-x-3">
+                  <label className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl border border-slate-300 transition cursor-pointer flex items-center space-x-2">
+                    <FontAwesomeIcon icon={uploadingImage ? faSpinner : faUpload} className={uploadingImage ? "animate-spin" : ""} />
+                    <span>{uploadingImage ? "Mengunggah..." : "Unggah Gambar..."}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploadingImage}
+                      className="hidden"
+                    />
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="URL gambar..."
+                    value={formData.image || ""}
+                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                    className="flex-1 px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+                {formData.image && (
+                  <div className="mt-2 relative w-24 h-24 rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
+                    <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
               </div>
 
               <div className="space-y-1.5">

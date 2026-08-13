@@ -10,6 +10,9 @@ export interface ClientLogo {
   name: string;
   src: string;
   alt: string;
+  publicId?: string;
+  slug?: string;
+  folder?: string;
   width?: number;
   height?: number;
   cloudinary?: boolean;

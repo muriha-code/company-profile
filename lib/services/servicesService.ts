@@ -39,6 +39,10 @@ export interface ServiceInputData {
   features: string[];
   badgeText: string;
   iconName: string;
+  image?: string;
+  imagePublicId?: string;
+  slug?: string;
+  folder?: string;
   order?: number;
   colorScheme?: {
     iconBg: string;
@@ -77,6 +81,10 @@ export async function getServicesFromFirestore(): Promise<ServiceItem[]> {
         features: data.features || [],
         badgeText: data.badgeText,
         iconName: iconKey,
+        image: data.image || "",
+        imagePublicId: data.imagePublicId || "",
+        slug: data.slug || "",
+        folder: data.folder || "growthline/services",
         colorScheme: data.colorScheme || {
           iconBg: "bg-blue-50 group-hover:bg-blue-600",
           iconColor: "text-blue-600 group-hover:text-white",
