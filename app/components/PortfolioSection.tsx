@@ -47,6 +47,7 @@ export interface PortfolioItem {
     text?: string;
     border?: string;
   };
+  order?: number;
 }
 
 // Daftar kategori untuk tab filter

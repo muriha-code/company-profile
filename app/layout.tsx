@@ -1,6 +1,5 @@
 import "./globals.css";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import ConditionalLayout from "./components/ConditionalLayout";
 import { ReactNode } from "react";
 import { Metadata } from "next";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -22,9 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body suppressHydrationWarning className="antialiased bg-white text-slate-900 selection:bg-blue-600 selection:text-white">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
   );

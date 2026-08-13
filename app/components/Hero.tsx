@@ -1,9 +1,29 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { CldImage } from "next-cloudinary";
+import { getHeroFromFirestore } from "@/lib/services/heroService";
 
 export default function Hero() {
+  const [heroBg, setHeroBg] = useState<string>("hero-bg_evwycr");
+  const [isCloudinary, setIsCloudinary] = useState<boolean>(true);
+
+  useEffect(() => {
+    async function loadHero() {
+      try {
+        const data = await getHeroFromFirestore();
+        if (data && data.src) {
+          setHeroBg(data.src);
+          setIsCloudinary(data.cloudinary !== undefined ? data.cloudinary : true);
+        }
+      } catch (err) {
+        console.error("Gagal memuat latar Hero dari Firestore:", err);
+      }
+    }
+    loadHero();
+  }, []);
+
   const scrollToSection = (targetId: string) => {
     const element = document.getElementById(targetId);
     if (element) {
@@ -18,14 +38,25 @@ export default function Hero() {
     >
       {/* 1. LAYER 0: Background Image */}
       <div className="absolute inset-0 z-0">
-        <CldImage
-          src="hero-bg_evwycr"
-          alt="GrowthLine Consulting Hero Background"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
+        {isCloudinary ? (
+          <CldImage
+            src={heroBg}
+            alt="GrowthLine Consulting Hero Background"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        ) : (
+          <Image
+            src={heroBg}
+            alt="GrowthLine Consulting Hero Background"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        )}
       </div>
 
       {/* 2. LAYER 10: Dark Gradient Overlay untuk kontras tinggi */}
@@ -62,8 +93,3 @@ export default function Hero() {
     </section>
   );
 }
-
-
-
-
-
