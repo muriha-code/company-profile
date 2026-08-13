@@ -24,7 +24,9 @@ export default function AdminLoginPage() {
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
-
+            if (typeof window !== "undefined") {
+                sessionStorage.setItem("justLoggedIn", "true");
+            }
             router.replace("/admin");
         } catch (error: any) {
             console.error("Login error:", error);

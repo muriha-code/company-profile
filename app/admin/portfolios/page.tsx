@@ -24,6 +24,9 @@ import {
 import { PortfolioItem } from "@/app/components/PortfolioSection";
 import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinaryClient";
 import { slugify } from "@/lib/utils/slugify";
+import Pagination from "@/app/admin/components/Pagination";
+
+const ITEMS_PER_PAGE = 5;
 
 const CATEGORY_OPTIONS = [
   { label: "Financial Strategy", slug: "financial" },
@@ -68,6 +71,7 @@ export default function AdminPortfoliosPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -221,6 +225,13 @@ export default function AdminPortfoliosPage() {
       await deletePortfolio(deletingId);
       showToast("Portofolio berhasil dihapus!");
       setDeletingId(null);
+
+      const remainingCount = portfolios.filter((p) => p.id !== deletingId).length;
+      const newTotalPages = Math.ceil(remainingCount / ITEMS_PER_PAGE) || 1;
+      if (currentPage > newTotalPages) {
+        setCurrentPage(newTotalPages);
+      }
+
       loadData();
     } catch (err) {
       console.error("Delete error:", err);
@@ -262,6 +273,12 @@ export default function AdminPortfoliosPage() {
       selectedCategory === "all" || item.categorySlug === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  const totalPages = Math.ceil(filteredPortfolios.length / ITEMS_PER_PAGE) || 1;
+  const paginatedPortfolios = filteredPortfolios.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   return (
     <div className="space-y-6">
@@ -311,14 +328,20 @@ export default function AdminPortfoliosPage() {
             type="text"
             placeholder="Cari berdasarkan judul atau nama klien..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
             className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
           />
         </div>
 
         <select
           value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
+          onChange={(e) => {
+            setSelectedCategory(e.target.value);
+            setCurrentPage(1);
+          }}
           className="px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 font-medium focus:outline-none focus:border-blue-500 transition cursor-pointer"
         >
           <option value="all">Semua Kategori</option>
@@ -343,78 +366,89 @@ export default function AdminPortfoliosPage() {
           <p className="text-xs text-slate-500">Tidak ada studi kasus yang sesuai dengan kriteria pencarian Anda.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-extrabold uppercase text-slate-500 tracking-wider">
-                  <th className="py-3.5 px-5">Gambar</th>
-                  <th className="py-3.5 px-5">Judul & Klien</th>
-                  <th className="py-3.5 px-5">Kategori</th>
-                  <th className="py-3.5 px-5">Metric / Hasil</th>
-                  <th className="py-3.5 px-5 text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
-                {filteredPortfolios.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-4 px-5">
-                      <div className="relative w-16 h-12 rounded-lg bg-slate-100 overflow-hidden border border-slate-200">
-                        {item.image ? (
-                          <Image
-                            src={item.image}
-                            alt={item.title}
-                            fill
-                            sizes="80px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-slate-400 text-[10px]">
-                            No Image
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="py-4 px-5 max-w-xs">
-                      <p className="font-bold text-slate-900 line-clamp-1">{item.title}</p>
-                      <p className="text-xs text-blue-600 font-semibold">{item.client}</p>
-                    </td>
-                    <td className="py-4 px-5">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold border ${item.badgeColor?.bg || "bg-blue-50"} ${item.badgeColor?.text || "text-blue-700"} ${item.badgeColor?.border || "border-blue-200"}`}>
-                        {item.category}
-                      </span>
-                    </td>
-                    <td className="py-4 px-5">
-                      {item.metric ? (
-                        <div>
-                          <span className="font-extrabold text-emerald-600">{item.metric}</span>
-                          <span className="text-[11px] text-slate-500 block">{item.metricLabel}</span>
-                        </div>
-                      ) : (
-                        <span className="text-slate-400 text-xs">-</span>
-                      )}
-                    </td>
-                    <td className="py-4 px-5 text-right space-x-2">
-                      <button
-                        onClick={() => handleOpenEditModal(item)}
-                        className="p-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-blue-600 hover:text-white transition-colors cursor-pointer"
-                        title="Edit Portofolio"
-                      >
-                        <FontAwesomeIcon icon={faEdit} className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={() => setDeletingId(item.id)}
-                        className="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition-colors cursor-pointer"
-                        title="Hapus Portofolio"
-                      >
-                        <FontAwesomeIcon icon={faTrash} className="w-3.5 h-3.5" />
-                      </button>
-                    </td>
+        <div className="space-y-4">
+          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-extrabold uppercase text-slate-500 tracking-wider">
+                    <th className="py-3.5 px-5">Gambar</th>
+                    <th className="py-3.5 px-5">Judul & Klien</th>
+                    <th className="py-3.5 px-5">Kategori</th>
+                    <th className="py-3.5 px-5">Metric / Hasil</th>
+                    <th className="py-3.5 px-5 text-right">Aksi</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
+                  {paginatedPortfolios.map((item) => (
+                    <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
+                      <td className="py-4 px-5">
+                        <div className="relative w-16 h-12 rounded-lg bg-slate-100 overflow-hidden border border-slate-200">
+                          {item.image ? (
+                            <Image
+                              src={item.image}
+                              alt={item.title}
+                              fill
+                              sizes="80px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-slate-400 text-[10px]">
+                              No Image
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td className="py-4 px-5 max-w-xs">
+                        <p className="font-bold text-slate-900 line-clamp-1">{item.title}</p>
+                        <p className="text-xs text-blue-600 font-semibold">{item.client}</p>
+                      </td>
+                      <td className="py-4 px-5">
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold border ${item.badgeColor?.bg || "bg-blue-50"} ${item.badgeColor?.text || "text-blue-700"} ${item.badgeColor?.border || "border-blue-200"}`}>
+                          {item.category}
+                        </span>
+                      </td>
+                      <td className="py-4 px-5">
+                        {item.metric ? (
+                          <div>
+                            <span className="font-extrabold text-emerald-600">{item.metric}</span>
+                            <span className="text-[11px] text-slate-500 block">{item.metricLabel}</span>
+                          </div>
+                        ) : (
+                          <span className="text-slate-400 text-xs">-</span>
+                        )}
+                      </td>
+                      <td className="py-4 px-5 text-right space-x-2">
+                        <button
+                          onClick={() => handleOpenEditModal(item)}
+                          className="p-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-blue-600 hover:text-white transition-colors cursor-pointer"
+                          title="Edit Portofolio"
+                        >
+                          <FontAwesomeIcon icon={faEdit} className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => setDeletingId(item.id)}
+                          className="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition-colors cursor-pointer"
+                          title="Hapus Portofolio"
+                        >
+                          <FontAwesomeIcon icon={faTrash} className="w-3.5 h-3.5" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredPortfolios.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+            itemLabel="portfolio"
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </div>
       )}
 

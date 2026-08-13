@@ -28,6 +28,9 @@ import {
 import { ClientLogo } from "@/app/components/ClientMarquee";
 import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinaryClient";
 import { slugify } from "@/lib/utils/slugify";
+import Pagination from "@/app/admin/components/Pagination";
+
+const ITEMS_PER_PAGE = 4;
 
 const emptyFormState: ClientLogoInput & { id?: string } = {
   name: "",
@@ -46,6 +49,7 @@ export default function AdminLogosPage() {
   const [logos, setLogos] = useState<ClientLogo[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -203,6 +207,13 @@ export default function AdminLogosPage() {
       await deleteClientLogo(deletingId);
       showToast("Logo klien berhasil dihapus!");
       setDeletingId(null);
+
+      const remainingCount = logos.filter((l) => l.id !== deletingId).length;
+      const newTotalPages = Math.ceil(remainingCount / ITEMS_PER_PAGE) || 1;
+      if (currentPage > newTotalPages) {
+        setCurrentPage(newTotalPages);
+      }
+
       loadData();
     } catch (err) {
       console.error("Delete error:", err);
@@ -216,6 +227,12 @@ export default function AdminLogosPage() {
     (l) =>
       l.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (l.alt && l.alt.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const totalPages = Math.ceil(filteredLogos.length / ITEMS_PER_PAGE) || 1;
+  const paginatedLogos = filteredLogos.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
 
   return (
@@ -265,7 +282,10 @@ export default function AdminLogosPage() {
           type="text"
           placeholder="Cari berdasarkan nama perusahaan..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setCurrentPage(1);
+          }}
           className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 transition"
         />
       </div>
@@ -283,68 +303,79 @@ export default function AdminLogosPage() {
           <p className="text-xs text-slate-500">Tidak ada data logo yang cocok.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredLogos.map((logo) => (
-            <div
-              key={logo.id}
-              className={`bg-white rounded-2xl border ${
-                logo.active !== false ? "border-slate-200" : "border-slate-200/50 opacity-60"
-              } p-5 shadow-sm flex flex-col justify-between space-y-4`}
-            >
-              <div>
-                <div className="relative w-full h-24 rounded-xl bg-slate-50 border border-slate-100 p-4 flex items-center justify-center overflow-hidden mb-3">
-                  {logo.cloudinary ? (
-                    <CldImage
-                      src={logo.src}
-                      alt={logo.alt || logo.name}
-                      width={logo.width || 170}
-                      height={logo.height || 60}
-                      className="max-h-16 w-auto object-contain"
-                    />
-                  ) : (
-                    <Image
-                      src={logo.src}
-                      alt={logo.alt || logo.name}
-                      width={logo.width || 170}
-                      height={logo.height || 60}
-                      className="max-h-16 w-auto object-contain"
-                    />
-                  )}
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {paginatedLogos.map((logo) => (
+              <div
+                key={logo.id}
+                className={`bg-white rounded-2xl border ${
+                  logo.active !== false ? "border-slate-200" : "border-slate-200/50 opacity-60"
+                } p-5 shadow-sm flex flex-col justify-between space-y-4`}
+              >
+                <div>
+                  <div className="relative w-full h-24 rounded-xl bg-slate-50 border border-slate-100 p-4 flex items-center justify-center overflow-hidden mb-3">
+                    {logo.cloudinary ? (
+                      <CldImage
+                        src={logo.src}
+                        alt={logo.alt || logo.name}
+                        width={logo.width || 170}
+                        height={logo.height || 60}
+                        className="max-h-16 w-auto object-contain"
+                      />
+                    ) : (
+                      <Image
+                        src={logo.src}
+                        alt={logo.alt || logo.name}
+                        width={logo.width || 170}
+                        height={logo.height || 60}
+                        className="max-h-16 w-auto object-contain"
+                      />
+                    )}
+                  </div>
+                  <h3 className="font-extrabold text-sm text-slate-900 truncate">{logo.name}</h3>
+                  <p className="text-[11px] text-slate-400 truncate">{logo.alt}</p>
                 </div>
-                <h3 className="font-extrabold text-sm text-slate-900 truncate">{logo.name}</h3>
-                <p className="text-[11px] text-slate-400 truncate">{logo.alt}</p>
-              </div>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                <button
-                  onClick={() => handleToggleActive(logo)}
-                  className={`inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
-                    logo.active !== false
-                      ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                      : "bg-slate-100 text-slate-500 hover:bg-slate-200"
-                  }`}
-                >
-                  <FontAwesomeIcon icon={logo.active !== false ? faEye : faEyeSlash} className="w-3 h-3" />
-                  <span>{logo.active !== false ? "Aktif" : "Non-aktif"}</span>
-                </button>
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <button
+                    onClick={() => handleToggleActive(logo)}
+                    className={`inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+                      logo.active !== false
+                        ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                        : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                    }`}
+                  >
+                    <FontAwesomeIcon icon={logo.active !== false ? faEye : faEyeSlash} className="w-3 h-3" />
+                    <span>{logo.active !== false ? "Aktif" : "Non-aktif"}</span>
+                  </button>
 
-                <div className="flex items-center space-x-1.5">
-                  <button
-                    onClick={() => handleOpenEditModal(logo)}
-                    className="p-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-purple-600 hover:text-white transition cursor-pointer"
-                  >
-                    <FontAwesomeIcon icon={faEdit} className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => setDeletingId(logo.id)}
-                    className="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition cursor-pointer"
-                  >
-                    <FontAwesomeIcon icon={faTrash} className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center space-x-1.5">
+                    <button
+                      onClick={() => handleOpenEditModal(logo)}
+                      className="p-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-purple-600 hover:text-white transition cursor-pointer"
+                    >
+                      <FontAwesomeIcon icon={faEdit} className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setDeletingId(logo.id)}
+                      className="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition cursor-pointer"
+                    >
+                      <FontAwesomeIcon icon={faTrash} className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredLogos.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+            itemLabel="logo klien"
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </div>
       )}
 

@@ -21,6 +21,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinaryClient";
 import { slugify } from "@/lib/utils/slugify";
+import Pagination from "@/app/admin/components/Pagination";
+
+const ITEMS_PER_PAGE = 3;
 import {
   getServices,
   createService,
@@ -109,6 +112,7 @@ export default function AdminServicesPage() {
   const [services, setServices] = useState<(ServiceItem & { iconName?: string })[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -253,6 +257,13 @@ export default function AdminServicesPage() {
       await deleteService(deletingId);
       showToast("Layanan berhasil dihapus!");
       setDeletingId(null);
+
+      const remainingCount = services.filter((s) => s.id !== deletingId).length;
+      const newTotalPages = Math.ceil(remainingCount / ITEMS_PER_PAGE) || 1;
+      if (currentPage > newTotalPages) {
+        setCurrentPage(newTotalPages);
+      }
+
       loadData();
     } catch (err) {
       console.error("Delete error:", err);
@@ -282,6 +293,12 @@ export default function AdminServicesPage() {
     (s) =>
       s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       s.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredServices.length / ITEMS_PER_PAGE) || 1;
+  const paginatedServices = filteredServices.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
 
   return (
@@ -331,7 +348,10 @@ export default function AdminServicesPage() {
           type="text"
           placeholder="Cari layanan berdasarkan judul atau subtitle..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setCurrentPage(1);
+          }}
           className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition"
         />
       </div>
@@ -349,60 +369,71 @@ export default function AdminServicesPage() {
           <p className="text-xs text-slate-500">Tidak ada data layanan yang cocok.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredServices.map((service) => (
-            <div
-              key={service.id}
-              className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between relative overflow-hidden"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`w-12 h-12 rounded-xl ${service.colorScheme?.iconBg || "bg-blue-50"} flex items-center justify-center`}>
-                    <FontAwesomeIcon icon={service.icon} className={`w-6 h-6 ${service.colorScheme?.iconColor || "text-blue-600"}`} />
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginatedServices.map((service) => (
+              <div
+                key={service.id}
+                className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between relative overflow-hidden"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`w-12 h-12 rounded-xl ${service.colorScheme?.iconBg || "bg-blue-50"} flex items-center justify-center`}>
+                      <FontAwesomeIcon icon={service.icon} className={`w-6 h-6 ${service.colorScheme?.iconColor || "text-blue-600"}`} />
+                    </div>
+                    <span className={`text-[11px] font-bold px-2.5 py-1 rounded-md border ${service.colorScheme?.badgeBg || "bg-blue-50 text-blue-700 border-blue-200"}`}>
+                      {service.badgeText}
+                    </span>
                   </div>
-                  <span className={`text-[11px] font-bold px-2.5 py-1 rounded-md border ${service.colorScheme?.badgeBg || "bg-blue-50 text-blue-700 border-blue-200"}`}>
-                    {service.badgeText}
-                  </span>
+
+                  <h3 className="font-extrabold text-lg text-slate-900">{service.title}</h3>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">{service.subtitle}</p>
+                  <p className="text-xs text-slate-600 leading-relaxed mb-4 line-clamp-3">{service.description}</p>
+
+                  <div className="border-t border-slate-100 pt-3 mb-4">
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Features ({service.features?.length || 0})</p>
+                    <ul className="space-y-1.5">
+                      {(service.features || []).slice(0, 3).map((feat, idx) => (
+                        <li key={idx} className="text-xs text-slate-700 flex items-center space-x-2">
+                          <FontAwesomeIcon icon={faCheck} className="w-3 h-3 text-emerald-500 flex-shrink-0" />
+                          <span className="truncate">{feat}</span>
+                        </li>
+                      ))}
+                      {(service.features || []).length > 3 && (
+                        <li className="text-[11px] text-slate-400 italic">+{(service.features || []).length - 3} fitur lainnya</li>
+                      )}
+                    </ul>
+                  </div>
                 </div>
 
-                <h3 className="font-extrabold text-lg text-slate-900">{service.title}</h3>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">{service.subtitle}</p>
-                <p className="text-xs text-slate-600 leading-relaxed mb-4 line-clamp-3">{service.description}</p>
-
-                <div className="border-t border-slate-100 pt-3 mb-4">
-                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Features ({service.features?.length || 0})</p>
-                  <ul className="space-y-1.5">
-                    {(service.features || []).slice(0, 3).map((feat, idx) => (
-                      <li key={idx} className="text-xs text-slate-700 flex items-center space-x-2">
-                        <FontAwesomeIcon icon={faCheck} className="w-3 h-3 text-emerald-500 flex-shrink-0" />
-                        <span className="truncate">{feat}</span>
-                      </li>
-                    ))}
-                    {(service.features || []).length > 3 && (
-                      <li className="text-[11px] text-slate-400 italic">+{(service.features || []).length - 3} fitur lainnya</li>
-                    )}
-                  </ul>
+                <div className="pt-4 border-t border-slate-100 flex justify-end space-x-2">
+                  <button
+                    onClick={() => handleOpenEditModal(service)}
+                    className="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-emerald-600 hover:text-white text-xs font-bold transition cursor-pointer"
+                  >
+                    <FontAwesomeIcon icon={faEdit} className="w-3.5 h-3.5 mr-1" />
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => setDeletingId(service.id)}
+                    className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white text-xs font-bold transition cursor-pointer"
+                  >
+                    <FontAwesomeIcon icon={faTrash} className="w-3.5 h-3.5 mr-1" />
+                    Hapus
+                  </button>
                 </div>
               </div>
+            ))}
+          </div>
 
-              <div className="pt-4 border-t border-slate-100 flex justify-end space-x-2">
-                <button
-                  onClick={() => handleOpenEditModal(service)}
-                  className="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-emerald-600 hover:text-white text-xs font-bold transition cursor-pointer"
-                >
-                  <FontAwesomeIcon icon={faEdit} className="w-3.5 h-3.5 mr-1" />
-                  Edit
-                </button>
-                <button
-                  onClick={() => setDeletingId(service.id)}
-                  className="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white text-xs font-bold transition cursor-pointer"
-                >
-                  <FontAwesomeIcon icon={faTrash} className="w-3.5 h-3.5 mr-1" />
-                  Hapus
-                </button>
-              </div>
-            </div>
-          ))}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredServices.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+            itemLabel="layanan"
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </div>
       )}
 
