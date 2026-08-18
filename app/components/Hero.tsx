@@ -34,7 +34,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative w-full min-h-[calc(100vh-140px)] sm:min-h-[calc(100vh-160px)] lg:min-h-[calc(100vh-180px)] flex items-center justify-center pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20 scroll-mt-20 overflow-hidden bg-slate-950"
+      className="relative w-full min-h-[60vh] lg:min-h-[420px] flex flex-col justify-center pt-24 sm:pt-28 pb-10 sm:pb-12 overflow-hidden bg-slate-950"
     >
       {/* 1. LAYER 0: Background Image */}
       <div className="absolute inset-0 z-0">
@@ -59,35 +59,32 @@ export default function Hero() {
         )}
       </div>
 
-      {/* 2. LAYER 10: Dark Gradient Overlay untuk kontras tinggi */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-slate-900/60 backdrop-blur-[1px]" />
+      {/* 2. LAYER 10: Overlay Gelap */}
+      <div className="absolute inset-0 z-10 bg-slate-950/70 backdrop-blur-[0.5px]" />
 
-      {/* 3. LAYER 20: Content Utama Full Screen Focus */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col justify-center">
-        <div className="max-w-3xl">
-          {/* Heading Utama (Dominan, Bold & Standout) */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white mb-5 sm:mb-6">
-            Your Partner in{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-              Business Growth
-            </span>
-          </h1>
+      {/* 3. LAYER 20: Konten Terstruktur */}
+      <div className="relative z-20 max-w-7xl mx-auto px-6 sm:px-8 lg:px-8 w-full flex flex-col items-start text-left">
+        {/* Heading */}
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-snug max-w-4xl">
+          Your Partner in{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
+            Business Growth
+          </span>
+        </h1>
 
-          {/* Deskripsi (Luas & Mudah Dibaca) */}
-          <p className="text-base sm:text-xl text-slate-300 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal">
-            GrowthLine Consulting membantu bisnis Anda berkembang secara terukur dan berkelanjutan dengan strategi terarah berbasis data serta eksekusi yang presisi.
-          </p>
+        {/* Deskripsi */}
+        <p className="text-sm sm:text-base text-slate-200 mt-3 sm:mt-4 max-w-2xl leading-relaxed font-normal">
+          GrowthLine Consulting membantu bisnis Anda berkembang secara terukur dan berkelanjutan dengan strategi terarah berbasis data serta eksekusi yang presisi.
+        </p>
 
-          {/* Tombol CTA */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-            {/* Tombol Utama CTA (Our Services) */}
-            <button
-              onClick={() => scrollToSection("services")}
-              className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white font-semibold px-8 py-3.5 sm:py-4 rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 transition-all duration-200 text-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-900 text-base"
-            >
-              Our Services
-            </button>
-          </div>
+        {/* Tombol CTA */}
+        <div className="mt-5 sm:mt-6 flex justify-start">
+          <button
+            onClick={() => scrollToSection("services")}
+            className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white font-semibold px-6 py-2.5 sm:px-7 sm:py-3 text-sm sm:text-base rounded-lg shadow-lg shadow-blue-500/20 transition-all duration-200 cursor-pointer"
+          >
+            Our Services
+          </button>
         </div>
       </div>
     </section>
