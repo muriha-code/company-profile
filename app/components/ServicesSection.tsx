@@ -124,10 +124,9 @@ export default function ServicesSection() {
             {[1, 2, 3, 4].map((n) => (
               <div
                 key={n}
-                className="bg-white rounded-2xl p-6 border border-slate-200/80 animate-pulse space-y-4 flex flex-col justify-between h-56"
+                className="bg-white rounded-2xl p-6 border border-slate-200/80 animate-pulse space-y-4 flex flex-col justify-between h-48"
               >
                 <div className="space-y-3">
-                  <div className="w-12 h-12 rounded-xl bg-slate-200" />
                   <div className="h-6 bg-slate-200 rounded-md w-3/4" />
                   <div className="h-4 bg-slate-100 rounded-md w-full" />
                   <div className="h-4 bg-slate-100 rounded-md w-5/6" />
@@ -167,19 +166,8 @@ export default function ServicesSection() {
                   />
 
                   <div className="relative z-10 flex flex-col h-full">
-                    {/* Icon */}
-                    {service.icon && (
-                      <div className="mb-4">
-                        <div
-                          className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${service.colorScheme?.iconBg || "bg-blue-50 group-hover:bg-blue-600"} ${service.colorScheme?.iconColor || "text-blue-600 group-hover:text-white"}`}
-                        >
-                          <FontAwesomeIcon icon={service.icon} className="w-5 h-5" />
-                        </div>
-                      </div>
-                    )}
-
                     {/* Judul Layanan */}
-                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors duration-200">
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2.5 group-hover:text-blue-600 transition-colors duration-200">
                       {service.title}
                     </h3>
 
@@ -324,33 +312,75 @@ export default function ServicesSection() {
           </div>
         )}
 
-        {/* Bottom Banner CTA */}
-        <div className="mt-14 sm:mt-16 lg:mt-20 bg-slate-900 rounded-3xl p-6 sm:p-10 lg:p-12 text-white shadow-2xl relative overflow-hidden">
-          <div className="absolute -right-16 -top-16 w-72 h-72 bg-blue-600/20 rounded-full blur-3xl" />
-          <div className="absolute -left-16 -bottom-16 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl" />
+        {/* Metodologi Kerja (3-Step Engagement Process) */}
+        <div className="mt-14 sm:mt-16 lg:mt-20 bg-slate-900 rounded-3xl p-8 md:p-12 text-white shadow-2xl relative overflow-hidden border border-slate-800">
+          <div className="absolute -right-16 -top-16 w-72 h-72 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -left-16 -bottom-16 w-72 h-72 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
-            <div className="max-w-2xl">
-              <span className="text-blue-400 font-semibold text-xs sm:text-sm uppercase tracking-widest">
-                Pendekatan Holistik
+          <div className="relative z-10">
+            {/* Header Kontainer */}
+            <div className="max-w-2xl mb-8 md:mb-10 text-center sm:text-left">
+              <span className="text-xs font-bold uppercase tracking-widest text-blue-400">
+                METODOLOGI KERJA
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold mt-2 mb-3 text-white">
-                Siap Mengakselerasi Pertumbuhan Bisnis Anda?
+              <h3 className="text-2xl md:text-3xl font-bold mt-2 mb-3 text-white">
+                Bagaimana Kami Mendampingi Bisnis Anda
               </h3>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                Kombinasikan strategi bisnis yang tajam dengan eksekusi kepemimpinan tim yang solid. Tim konsultan senior kami siap mendampingi perjalanan bisnis Anda.
+              <p className="text-slate-400 text-sm md:text-base leading-relaxed">
+                Pendekatan terstruktur dan terukur untuk memastikan setiap rekomendasi dapat dieksekusi nyata.
               </p>
             </div>
 
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center space-x-3 px-7 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 transform hover:-translate-y-0.5 flex-shrink-0"
-            >
-              <span>Jadwalkan Konsultasi Gratis</span>
-              <FontAwesomeIcon icon={faArrowRight} className="w-4 h-4" />
-            </a>
+            {/* Grid 3 Langkah (Proses Kerja) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Langkah 01 */}
+              <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-6 transition-all duration-300 hover:border-blue-500/40 hover:bg-slate-800/80 group">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-3xl sm:text-4xl font-extrabold text-blue-400/40 group-hover:text-blue-400 transition-colors">
+                    01
+                  </span>
+                  <div className="w-2 h-2 rounded-full bg-blue-400/60 group-hover:bg-blue-400 transition-colors" />
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
+                  Audit & Diagnosa
+                </h4>
+                <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                  Menganalisis sistem operasional, keuangan, dan memetakan akar masalah serta potensi pertumbuhan.
+                </p>
+              </div>
+
+              {/* Langkah 02 */}
+              <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-6 transition-all duration-300 hover:border-blue-500/40 hover:bg-slate-800/80 group">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-3xl sm:text-4xl font-extrabold text-blue-400/40 group-hover:text-blue-400 transition-colors">
+                    02
+                  </span>
+                  <div className="w-2 h-2 rounded-full bg-blue-400/60 group-hover:bg-blue-400 transition-colors" />
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
+                  Formulasi Strategi
+                </h4>
+                <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                  Menyusun roadmap taktis berbasis data yang disesuaikan dengan skala dan target bisnis Anda.
+                </p>
+              </div>
+
+              {/* Langkah 03 */}
+              <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-6 transition-all duration-300 hover:border-blue-500/40 hover:bg-slate-800/80 group">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-3xl sm:text-4xl font-extrabold text-blue-400/40 group-hover:text-blue-400 transition-colors">
+                    03
+                  </span>
+                  <div className="w-2 h-2 rounded-full bg-blue-400/60 group-hover:bg-blue-400 transition-colors" />
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
+                  Eksekusi & Monitoring
+                </h4>
+                <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                  Pendampingan langsung dalam implementasi serta evaluasi KPI berkala guna memastikan hasil optimal.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
